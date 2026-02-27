@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EM Infrastructure Portfolio Process v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #0c1117;
+  --surface: #151c25;
+  --surface-2: #1a2332;
+  --surface-3: #1f2b3d;
+  --border: #2a3a50;
+  --border-light: #334563;
+  --text: #e2e8f0;
+  --text-muted: #8899ae;
+  --text-dim: #5a6f88;
+  --accent: #4db8a4;
+  --accent-glow: rgba(77,184,164,0.15);
+  --accent-2: #6c8cff;
+  --accent-3: #e8a838;
+  --gate: #c084fc;
+  --gate-glow: rgba(192,132,252,0.12);
+  --reject: #f87171;
+  --workout: #fb923c;
+  --output: #34d399;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --font: 'DM Sans', sans-serif;
+  --font-display: 'Playfair Display', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 48px rgba(0,0,0,0.4);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  padding: 80px 40px 60px;
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(77,184,164,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 30%, rgba(108,140,255,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: var(--accent-glow);
+  border: 1px solid rgba(77,184,164,0.25);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 640px;
+  margin: 0 auto 40px;
+}
+
+/* Stats row */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 0;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px 28px;
+  min-width: 130px;
+  text-align: center;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.stat-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.stat-num {
+  font-family: var(--font-mono);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+.stat-num.accent { color: var(--accent); }
+.stat-num.accent2 { color: var(--accent-2); }
+.stat-num.accent3 { color: var(--accent-3); }
+.stat-num.gate-c { color: var(--gate); }
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ===== OVERVIEW CARDS ===== */
+.overview-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+.overview-section h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 24px;
+}
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+.ov-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: border-color 0.3s;
+}
+.ov-card:hover { border-color: var(--border-light); }
+.ov-card h3 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.ov-card .big-num {
+  font-family: var(--font-mono);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+/* Step list inside overview cards */
+.step-list { list-style: none; }
+.step-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+.step-list .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+
+/* Bar chart */
+.bar-chart { margin-top: 12px; }
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.bar-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  width: 100px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.bar-track {
+  flex: 1;
+  height: 8px;
+  background: var(--surface-3);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 1s ease;
+}
+
+/* ===== TABS ===== */
+.tabs-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+.tabs-header {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  scrollbar-width: none;
+}
+.tabs-header::-webkit-scrollbar { display: none; }
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 12px 18px;
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn:hover { color: var(--text-muted); }
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Tab content */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.tab-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.tab-meta h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: #fff;
+}
+.tab-meta .tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.tag-scope { background: rgba(77,184,164,0.12); color: var(--accent); border: 1px solid rgba(77,184,164,0.2); }
+.tag-steps { background: rgba(108,140,255,0.12); color: var(--accent-2); border: 1px solid rgba(108,140,255,0.2); }
+.tag-gate { background: var(--gate-glow); color: var(--gate); border: 1px solid rgba(192,132,252,0.25); }
+.tab-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  max-width: 800px;
+}
+
+/* Diagram container */
+.diagram-wrap {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.diagram-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.tool-btn {
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: var(--font);
+  font-size: 0.75rem;
+  padding: 5px 12px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.tool-btn:hover { background: var(--border); color: var(--text); }
+.diagram-body {
+  padding: 32px;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  min-height: 300px;
+}
+.diagram-body .mermaid { width: 100%; }
+
+/* Fullscreen overlay */
+.fullscreen-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  overflow: auto;
+  padding: 20px;
+}
+.fullscreen-overlay.open { display: flex; align-items: center; justify-content: center; }
+.fullscreen-overlay .close-fs {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 1.2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+}
+.fullscreen-overlay .mermaid-fs { padding: 40px; }
+
+/* ===== TABLES ===== */
+.tables-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+.tables-section h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 24px;
+}
+.tables-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.tbl-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.tbl-card h3 {
+  padding: 16px 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.tbl-card table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.tbl-card th, .tbl-card td {
+  padding: 10px 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(42,58,80,0.5);
+}
+.tbl-card th {
+  color: var(--text-dim);
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tbl-card td { color: var(--text-muted); }
+.tbl-card tr:last-child td { border-bottom: none; }
+.tbl-card td:first-child { color: var(--text); font-weight: 500; }
+
+/* ===== LEGEND ===== */
+.legend-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+.legend-section h2 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 24px;
+}
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.legend-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.legend-card h3 {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+.legend-swatch {
+  width: 28px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.legend-item span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 32px 24px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+footer a { color: var(--accent); text-decoration: none; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--surface-2);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 500;
+  z-index: 2000;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero { padding: 48px 20px 40px; }
+  .stats-row { gap: 8px; }
+  .stat-card { padding: 14px 18px; min-width: 100px; }
+  .stat-num { font-size: 1.4rem; }
+  .diagram-body { padding: 16px; }
+  .tab-btn { padding: 10px 12px; font-size: 0.75rem; }
+}
+
+/* Mermaid overrides for dark theme */
+.diagram-body .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">Process Framework v3</div>
+  <h1>EM Infrastructure <span>Portfolio Process</span></h1>
+  <p class="hero-sub">Build and manage a diversified EM infrastructure / project finance portfolio with allocation, risk budgeting, and performance reporting.</p>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num accent">8</div><div class="stat-label">Steps</div></div>
+    <div class="stat-card"><div class="stat-num accent2">5</div><div class="stat-label">Gates</div></div>
+    <div class="stat-card"><div class="stat-num accent3">8</div><div class="stat-label">Outputs</div></div>
+    <div class="stat-card"><div class="stat-num gate-c">3</div><div class="stat-label">Feedback Loops</div></div>
+    <div class="stat-card"><div class="stat-num">52</div><div class="stat-label">Process Nodes</div></div>
+  </div>
+</header>
+
+<!-- OVERVIEW CARDS -->
+<section class="overview-section">
+  <div class="cards-row">
+    <!-- Card 1: Step Distribution -->
+    <div class="ov-card">
+      <h3>Step Distribution</h3>
+      <div class="big-num">8 Steps</div>
+      <ul class="step-list">
+        <li><span class="dot" style="background:var(--accent)"></span>Governance &amp; Policy (Steps 1-2)</li>
+        <li><span class="dot" style="background:var(--accent-2)"></span>Sourcing &amp; Pipeline (Steps 3-4)</li>
+        <li><span class="dot" style="background:var(--gate)"></span>Approval &amp; Construction (Step 5)</li>
+        <li><span class="dot" style="background:var(--accent-3)"></span>Deployment &amp; Execution (Steps 6-7)</li>
+        <li><span class="dot" style="background:var(--output)"></span>Monitoring &amp; Reporting (Step 8)</li>
+      </ul>
+    </div>
+
+    <!-- Card 2: Gate Architecture -->
+    <div class="ov-card">
+      <h3>Gate Architecture</h3>
+      <div class="big-num">5 Gates</div>
+      <ul class="step-list">
+        <li><span class="dot" style="background:var(--reject)"></span>E&amp;S Screening (IFC Standards)</li>
+        <li><span class="dot" style="background:var(--reject)"></span>Preliminary DD Go/Kill</li>
+        <li><span class="dot" style="background:var(--gate)"></span>IC Approval (3-way)</li>
+        <li><span class="dot" style="background:var(--accent-3)"></span>CP Satisfaction / Terminate</li>
+        <li><span class="dot" style="background:var(--accent)"></span>Watchlist Trigger</li>
+      </ul>
+    </div>
+
+    <!-- Card 3: Node Types -->
+    <div class="ov-card">
+      <h3>Node Type Breakdown</h3>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">Process</span>
+          <div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--accent-2)"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Decision</span>
+          <div class="bar-track"><div class="bar-fill" style="width:22%;background:var(--accent-3)"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Output</span>
+          <div class="bar-track"><div class="bar-fill" style="width:16%;background:var(--output)"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Gate</span>
+          <div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--reject)"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Workout</span>
+          <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--workout)"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Terminal</span>
+          <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--text-dim)"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TABS -->
+<section class="tabs-section">
+  <div class="tabs-header" role="tablist">
+    <button class="tab-btn active" data-tab="master">Master Flow</button>
+    <button class="tab-btn" data-tab="mandate">Steps 1-2</button>
+    <button class="tab-btn" data-tab="sourcing">Steps 3-4</button>
+    <button class="tab-btn" data-tab="approval">Step 5</button>
+    <button class="tab-btn" data-tab="execution">Steps 6-7</button>
+    <button class="tab-btn" data-tab="monitoring">Step 8</button>
+  </div>
+
+  <!-- TAB: MASTER FLOW -->
+  <div class="tab-content active" id="tab-master">
+    <div class="tab-meta">
+      <h2>Master Portfolio Workflow</h2>
+      <span class="tag tag-scope">End-to-End</span>
+    </div>
+    <p class="tab-desc">Complete 8-step process from mandate definition through portfolio monitoring. All gates, feedback loops, and output documents shown.</p>
+    <div class="diagram-wrap">
+      <div class="diagram-toolbar">
+        <button class="tool-btn" onclick="copySrc('master')">Copy Source</button>
+        <button class="tool-btn" onclick="openFs('master')">Fullscreen</button>
+      </div>
+      <div class="diagram-body">
+        <pre class="mermaid" id="dia-master">
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+flowchart TD
+    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
+    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
+    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
+    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
+    classDef gate fill:#4a1025,stroke:#b02a37,stroke-width:2px,color:#f8d7da
+    classDef workout fill:#3d1f00,stroke:#b02a37,stroke-width:1.5px,color:#ffcdd2
+    classDef rejected fill:#37474f,stroke:#78909c,stroke-width:2px,color:#b0bec5
+
+    START(["START"]):::terminal
+    REJECTED(["DEAL REJECTED"]):::rejected
+
+    START --> A1
+
+    subgraph S1["STEP 1: MANDATE & GOVERNANCE"]
+        A1["1.1 Identify Principal"]:::process
+        A2["1.2 Define Beneficiaries"]:::process
+        A3["1.3 Set Capital Objectives"]:::process
+        A4["1.4 Establish Governance"]:::process
+        A5["1.5 Portfolio Architecture"]:::process
+        A6["1.6 Formalize Mandate"]:::process
+        A1 --> A2 --> A3
+        A1 --> A4
+        A2 --> A4
+        A3 --> A5
+        A4 --> A5
+        A5 --> A6
+    end
+
+    A6 --> O1[/"Mandate Statement"/]:::output
+    O1 --> B1
+
+    subgraph S2["STEP 2: INVESTMENT POLICY"]
+        B1["2.1 Return Objective"]:::process
+        B2["2.2 Risk Parameters"]:::process
+        B2a["2.3 ESG & Impact Framework"]:::process
+        B3["2.4 Time Horizon"]:::process
+        B4["2.5 Constraints"]:::process
+        B5["2.6 Select Benchmark"]:::process
+        B6["2.7 Formalize Policy"]:::process
+        B1 --> B2 --> B2a --> B3 --> B4 --> B5 --> B6
+    end
+
+    B6 --> O2[/"Investment Policy"/]:::output
+    O2 --> C1
+
+    subgraph S3["STEP 3: OPPORTUNITY SET"]
+        C1["3.1 Sector Tiers"]:::process
+        C2["3.2 Geography Tiers"]:::process
+        C3["3.3 Instrument Menu"]:::process
+        C4["3.4 Currency & Hedging"]:::process
+        C5["3.5 Sourcing Channels"]:::process
+        C6["3.6 Formalize Universe"]:::process
+        C1 --> C2 --> C3 --> C4 --> C5 --> C6
+    end
+
+    C6 --> O3[/"Eligible Universe"/]:::output
+    O3 --> D1
+
+    subgraph S4["STEP 4: PIPELINE & THESIS"]
+        D1["4.1 Origination"]:::process
+        D2{"4.2 GATE: E&S"}:::gate
+        D2R{"4.3 Remediable?"}:::decision
+        D3["4.4 Research"]:::process
+        D4["4.5 Political Risk"]:::process
+        D5["4.6 Preliminary DD"]:::process
+        D6{"4.7 GATE: DD?"}:::decision
+        D7["4.8 Detailed DD"]:::process
+        D8["4.9 Investment Memo"]:::process
+        D9["4.10 Valuation & Rating"]:::process
+        D1 --> D2
+        D2 -->|"Pass"| D3
+        D2 -->|"Fail"| D2R
+        D2R -->|"Restructure"| D1
+        D3 --> D4 --> D5 --> D6
+        D6 -->|"Proceed"| D7 --> D8 --> D9
+    end
+
+    D2R -->|"No"| REJECTED
+    D6 -->|"Kill"| REJECTED
+
+    D9 --> O4[/"Memo & Assessment"/]:::output
+    O4 --> E1
+
+    subgraph S5["STEP 5: APPROVAL & CONSTRUCTION"]
+        E1["5.1 IC Review"]:::process
+        E2{"5.2 IC Approval"}:::decision
+        E3["5.3 Portfolio Sizing"]:::process
+        E4["5.4 Stress Test"]:::process
+        E5["5.5 Finalize Portfolio"]:::process
+        E1 --> E2
+        E2 -->|"Approved"| E3
+        E2 -->|"Conditional"| D8
+        E3 --> E4 --> E5
+    end
+
+    E2 -->|"Rejected"| REJECTED
+
+    E5 --> O5[/"Approved Position"/]:::output
+    O5 --> F1
+
+    subgraph S6["STEP 6: DEPLOYMENT PACING"]
+        F1["6.1 Commitment Schedule"]:::process
+        F2["6.2 J-Curve Projection"]:::process
+        F3["6.3 Liquidity Buffer"]:::process
+        F4["6.4 Recycling Policy"]:::process
+        F1 --> F2 --> F3 --> F4
+    end
+
+    F4 --> O6[/"Pacing Plan"/]:::output
+    O6 --> G1
+
+    subgraph S7["STEP 7: EXECUTION & CLOSE"]
+        G1["7.1 Negotiation"]:::process
+        G2["7.2 Conditions Precedent"]:::process
+        G3{"7.3 CP Satisfied?"}:::decision
+        G4["7.4 Financial Close"]:::process
+        G5["7.5 Booking & Trustee"]:::process
+        G1 --> G2 --> G3
+        G3 -->|"Yes"| G4
+        G3 -->|"Renegotiate"| G1
+        G3 -->|"Terminate"| REJECTED
+        G4 --> G5
+    end
+
+    G5 --> O7[/"Live Portfolio"/]:::output
+    O7 --> H1
+
+    subgraph S8["STEP 8: MONITORING & REPORTING"]
+        H1["8.1 Track KPIs"]:::process
+        H2["8.2 Attribution"]:::process
+        H2a["8.3 Credit Review"]:::process
+        H3["8.4 Impact Reporting"]:::process
+        H4{"8.5 Watchlist?"}:::decision
+        H4W1["8.5a Restructuring"]:::workout
+        H4W2["8.5b Workout"]:::workout
+        H4W3{"8.5c Resolution"}:::decision
+        H5["8.6 Reassess"]:::process
+        H6{"8.7 Action Decision"}:::decision
+        H7["8.8 Reporting"]:::process
+        H1 --> H2 --> H2a --> H3 --> H4
+        H4 -->|"Triggered"| H4W1 --> H4W2 --> H4W3
+        H4W3 -->|"Restructured"| H1
+        H4W3 -->|"Exit / Write-Off"| H5
+        H4 -->|"Not Triggered"| H5
+        H5 --> H6
+        H6 -->|"Hold"| H7
+    end
+
+    H6 -->|"Rebalance"| H7
+    H7 --> O8[/"Performance Report"/]:::output
+    O8 --> END(["END / NEXT CYCLE"]):::terminal
+    H6 -.->|"Tactical"| E3
+    H6 -.->|"Strategic"| C1
+    H6 -.->|"Fundamental"| A1
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: STEPS 1-2 -->
+  <div class="tab-content" id="tab-mandate">
+    <div class="tab-meta">
+      <h2>Mandate &amp; Investment Policy</h2>
+      <span class="tag tag-steps">Steps 1-2</span>
+    </div>
+    <p class="tab-desc">Foundation layer. Define the principal, governance structure, capital objectives, ESG framework, and formalize both the mandate statement and investment policy.</p>
+    <div class="diagram-wrap">
+      <div class="diagram-toolbar">
+        <button class="tool-btn" onclick="copySrc('mandate')">Copy Source</button>
+        <button class="tool-btn" onclick="openFs('mandate')">Fullscreen</button>
+      </div>
+      <div class="diagram-body">
+        <pre class="mermaid" id="dia-mandate">
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+flowchart TD
+    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
+    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
+    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
+
+    START(["Foundation"]):::terminal
+
+    subgraph S1["STEP 1: MANDATE & GOVERNANCE"]
+        A1["1.1 Identify Principal\n(DFI, Fund Sponsor,\nBlended Finance Vehicle)"]:::process
+        A2["1.2 Define Beneficiaries\n& Development Mandate"]:::process
+        A3["1.3 Set Capital Objectives\n(Return Target, Impact Overlay,\nCapital Preservation Priority)"]:::process
+        A4["1.4 Establish Governance\n(IC Composition, Delegation\nMatrix, Approval Thresholds)"]:::process
+        A5["1.5 Define Portfolio\nArchitecture"]:::process
+        A6["1.6 Formalize Mandate"]:::process
+        A1 --> A2
+        A2 --> A3
+        A1 --> A4
+        A2 --> A4
+        A3 --> A5
+        A4 --> A5
+        A5 --> A6
+    end
+
+    subgraph S2["STEP 2: INVESTMENT POLICY"]
+        B1["2.1 Return / Performance\nObjective\n(SOFR + Spread, Real Return Floor)"]:::process
+        B2["2.2 Risk Parameters\n(Credit Loss Tolerance,\nConcentration Limits, FX Ceiling)"]:::process
+        B2a["2.3 ESG & Impact Framework\n(E&S Standards, Exclusion List,\nImpact KPIs, Additionality Criteria)"]:::process
+        B3["2.4 Time Horizon\n(Fund Life, Deployment\nPeriod, Exit Window)"]:::process
+        B4["2.5 Constraints &\nStructural Advantages\n(Regulatory, DFI Co-lending,\nPreferred Creditor Status)"]:::process
+        B5["2.6 Select Benchmark\n(Absolute Return\nor Reference Index)"]:::process
+        B6["2.7 Formalize Policy"]:::process
+        B1 --> B2
+        B2 --> B2a
+        B2a --> B3
+        B3 --> B4
+        B4 --> B5
+        B5 --> B6
+    end
+
+    START --> A1
+    A6 --> O1[/"Mandate Statement"/]:::output
+    O1 --> B1
+    B6 --> O2[/"Investment Policy Framework"/]:::output
+    O2 --> NEXT(["Proceed to Step 3"]):::terminal
+
+    style S1 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+    style S2 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: STEPS 3-4 -->
+  <div class="tab-content" id="tab-sourcing">
+    <div class="tab-meta">
+      <h2>Sourcing &amp; Deal Pipeline</h2>
+      <span class="tag tag-steps">Steps 3-4</span>
+      <span class="tag tag-gate">2 Gates</span>
+    </div>
+    <p class="tab-desc">Define the eligible universe, then run each deal through E&amp;S screening, research aggregation, political risk assessment, due diligence, and valuation with internal risk rating.</p>
+    <div class="diagram-wrap">
+      <div class="diagram-toolbar">
+        <button class="tool-btn" onclick="copySrc('sourcing')">Copy Source</button>
+        <button class="tool-btn" onclick="openFs('sourcing')">Fullscreen</button>
+      </div>
+      <div class="diagram-body">
+        <pre class="mermaid" id="dia-sourcing">
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+flowchart TD
+    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
+    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
+    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
+    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
+    classDef gate fill:#4a1025,stroke:#b02a37,stroke-width:2px,color:#f8d7da
+    classDef rejected fill:#37474f,stroke:#78909c,stroke-width:2px,color:#b0bec5
+
+    IN(["From Investment Policy"]):::terminal
+    REJECTED(["DEAL REJECTED"]):::rejected
+
+    subgraph S3["STEP 3: OPPORTUNITY SET & SOURCING"]
+        C1["3.1 Sector Allocation Tiers\n(Power, Transport, Digital,\nWater/Sanitation, Social)"]:::process
+        C2["3.2 Geography Tiers\n(Core EM, Frontier,\nFragile States)"]:::process
+        C3["3.3 Instrument Menu\n(Senior Secured, Mezzanine,\nEquity, Guarantees)"]:::process
+        C4["3.4 Currency Exposure\n& Hedging Policy"]:::process
+        C5["3.5 Sourcing Channels\n(DFI Pipeline, Sponsor\nRelationships, Gov PPP Pipeline)"]:::process
+        C6["3.6 Formalize Universe"]:::process
+        C1 --> C2 --> C3 --> C4 --> C5 --> C6
+    end
+
+    subgraph S4["STEP 4: DEAL PIPELINE & THESIS DEVELOPMENT"]
+        D1["4.1 Origination &\nInitial Screening"]:::process
+        D2{"4.2 GATE: E&S\nScreening\n(IFC Performance\nStandards)"}:::gate
+        D2R{"4.3 E&S Issues\nRemediable?"}:::decision
+        D3["4.4 Research Aggregation\n(CIMs, Site Visits, Technical\nReports, Legal/Regulatory)"]:::process
+        D4["4.5 Political & Sovereign\nRisk Assessment"]:::process
+        D5["4.6 Preliminary\nDue Diligence\n(Commercial, Technical,\nLegal/Permitting)"]:::process
+        D6{"4.7 GATE: Proceed to\nDetailed DD?"}:::decision
+        D7["4.8 Detailed Due Diligence\n& Financial Modeling\n(Construction Risk, Offtake,\nFX Structure)"]:::process
+        D8["4.9 Investment Memo\n& Scenario Analysis\n(Bull/Bear/Base Case,\nKill Criteria)"]:::process
+        D9["4.10 Valuation, Pricing &\nInternal Risk Rating\n(Credit Spread, PD/LGD,\nRisk Grade, Impact Score)"]:::process
+        D1 --> D2
+        D2 -->|"Pass"| D3
+        D2 -->|"Fail"| D2R
+        D2R -->|"Yes:\nRestructure\n& Resubmit"| D1
+        D3 --> D4
+        D4 --> D5
+        D5 --> D6
+        D6 -->|"Proceed"| D7
+        D7 --> D8
+        D8 --> D9
+    end
+
+    D2R -->|"No"| REJECTED
+    D6 -->|"Kill"| REJECTED
+
+    IN --> C1
+    C6 --> O3[/"Eligible Universe"/]:::output
+    O3 --> D1
+    D9 --> O4[/"Investment Memo\n& Risk Assessment"/]:::output
+    O4 --> NEXT(["Proceed to IC Review"]):::terminal
+
+    style S3 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+    style S4 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: STEP 5 -->
+  <div class="tab-content" id="tab-approval">
+    <div class="tab-meta">
+      <h2>Decision, Approval &amp; Portfolio Construction</h2>
+      <span class="tag tag-steps">Step 5</span>
+      <span class="tag tag-gate">IC Gate</span>
+    </div>
+    <p class="tab-desc">Three-way IC decision (Approve / Conditional / Reject). Approved deals go through portfolio sizing, concentration checks, and stress testing before finalization.</p>
+    <div class="diagram-wrap">
+      <div class="diagram-toolbar">
+        <button class="tool-btn" onclick="copySrc('approval')">Copy Source</button>
+        <button class="tool-btn" onclick="openFs('approval')">Fullscreen</button>
+      </div>
+      <div class="diagram-body">
+        <pre class="mermaid" id="dia-approval">
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+flowchart TD
+    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
+    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
+    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
+    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
+    classDef rejected fill:#37474f,stroke:#78909c,stroke-width:2px,color:#b0bec5
+
+    IN(["From Investment Memo"]):::terminal
+    REJECTED(["DEAL REJECTED"]):::rejected
+
+    subgraph S5["STEP 5: DECISION, APPROVAL & PORTFOLIO CONSTRUCTION"]
+        E1["5.1 IC Review\n& Compliance Clearance"]:::process
+        E2{"5.2 IC\nApproval"}:::decision
+        E3["5.3 Portfolio Sizing\n& Concentration Check\n(Name, Country, Sector,\nSponsor, Currency Limits)"]:::process
+        E4["5.4 Stress Test\n(FX Shock, Political Event,\nConstruction Delay,\nRefinancing Risk)"]:::process
+        E5["5.5 Finalize\nTarget Portfolio"]:::process
+        E1 --> E2
+        E2 -->|"Approved"| E3
+        E2 -->|"Conditional:\nRevise &\nResubmit"| REVISE
+        E3 --> E4
+        E4 --> E5
+    end
+
+    REVISE(["Return to\nInvestment Memo"]):::terminal
+    E2 -->|"Rejected"| REJECTED
+
+    IN --> E1
+    E5 --> O5[/"Approved Position\n& Audit Trail"/]:::output
+    O5 --> NEXT(["Proceed to\nDeployment Pacing"]):::terminal
+
+    style S5 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: STEPS 6-7 -->
+  <div class="tab-content" id="tab-execution">
+    <div class="tab-meta">
+      <h2>Deployment &amp; Execution</h2>
+      <span class="tag tag-steps">Steps 6-7</span>
+      <span class="tag tag-gate">CP Gate</span>
+    </div>
+    <p class="tab-desc">Capital deployment pacing (commitment scheduling, J-curve projection, liquidity buffers) followed by execution through negotiation, CP satisfaction, financial close, and booking.</p>
+    <div class="diagram-wrap">
+      <div class="diagram-toolbar">
+        <button class="tool-btn" onclick="copySrc('execution')">Copy Source</button>
+        <button class="tool-btn" onclick="openFs('execution')">Fullscreen</button>
+      </div>
+      <div class="diagram-body">
+        <pre class="mermaid" id="dia-execution">
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+flowchart TD
+    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
+    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
+    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
+    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
+    classDef rejected fill:#37474f,stroke:#78909c,stroke-width:2px,color:#b0bec5
+
+    IN(["From Approved Position"]):::terminal
+    REJECTED(["DEAL TERMINATED"]):::rejected
+
+    subgraph S6["STEP 6: CAPITAL DEPLOYMENT PACING"]
+        F1["6.1 Commitment Schedule\nby Vintage Year"]:::process
+        F2["6.2 J-Curve Projection\n(Net Cash Flow Profile)"]:::process
+        F3["6.3 Liquidity Buffer\nSizing"]:::process
+        F4["6.4 Recycling Policy\n(Reinvest Repayments\nvs Return Capital)"]:::process
+        F1 --> F2 --> F3 --> F4
+    end
+
+    subgraph S7["STEP 7: EXECUTION & FINANCIAL CLOSE"]
+        G1["7.1 Negotiation &\nDocumentation\n(Term Sheet, Loan Agreement,\nSecurity Package)"]:::process
+        G2["7.2 Conditions Precedent\n& Regulatory Approvals"]:::process
+        G3{"7.3 CP\nSatisfied?"}:::decision
+        G4["7.4 Financial Close\n& First Disbursement\n(May Be Staged to\nConstruction Milestones)"]:::process
+        G5["7.5 Booking, Custodian\n& Trustee Setup"]:::process
+        G1 --> G2 --> G3
+        G3 -->|"Yes"| G4
+        G3 -->|"No:\nRenegotiate"| G1
+        G3 -->|"Terminate:\nCPs Unresolvable"| REJECTED
+        G4 --> G5
+    end
+
+    IN --> F1
+    F4 --> O6[/"Pacing Plan"/]:::output
+    O6 --> G1
+    G5 --> O7[/"Live Portfolio"/]:::output
+    O7 --> NEXT(["Proceed to Monitoring"]):::terminal
+
+    style S6 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+    style S7 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: STEP 8 -->
+  <div class="tab-content" id="tab-monitoring">
+    <div class="tab-meta">
+      <h2>Monitoring, Reporting &amp; Rebalancing</h2>
+      <span class="tag tag-steps">Step 8</span>
+      <span class="tag tag-gate">Watchlist Gate</span>
+    </div>
+    <p class="tab-desc">Continuous monitoring loop with KPI tracking, portfolio credit review, impact reporting, watchlist/workout paths, and a consolidated action decision node with three feedback tiers.</p>
+    <div class="diagram-wrap">
+      <div class="diagram-toolbar">
+        <button class="tool-btn" onclick="copySrc('monitoring')">Copy Source</button>
+        <button class="tool-btn" onclick="openFs('monitoring')">Fullscreen</button>
+      </div>
+      <div class="diagram-body">
+        <pre class="mermaid" id="dia-monitoring">
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+flowchart TD
+    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
+    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
+    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
+    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
+    classDef workout fill:#3d1f00,stroke:#b02a37,stroke-width:1.5px,color:#ffcdd2
+
+    IN(["From Live Portfolio"]):::terminal
+
+    subgraph S8["STEP 8: MONITORING, REPORTING & REBALANCING"]
+        H1["8.1 Track KPIs vs Thesis\n(Covenants, Construction\nProgress, Offtake Volumes)"]:::process
+        H2["8.2 Performance Attribution\n(Spread, FX Impact,\nCredit Migration)"]:::process
+        H2a["8.3 Portfolio Credit Review\n(Rating Migration, Expected Loss\nRecalculation, Provisioning)"]:::process
+        H3["8.4 Development Impact\nReporting\n(Jobs, CO2, Access Metrics)"]:::process
+        H4{"8.5 Watchlist\nTrigger?"}:::decision
+        H4W1["8.5a Restructuring\nAssessment"]:::workout
+        H4W2["8.5b Workout /\nRecovery Process"]:::workout
+        H4W3{"8.5c\nResolution"}:::decision
+        H5["8.6 Reassess Conditions\n& Portfolio Views"]:::process
+        H6{"8.7 Portfolio\nAction Decision"}:::decision
+        H7["8.8 Stakeholder Reporting\n(LP/Board Reports,\nRegulatory Filings)"]:::process
+        H1 --> H2 --> H2a --> H3 --> H4
+        H4 -->|"Triggered"| H4W1 --> H4W2 --> H4W3
+        H4W3 -->|"Restructured"| H1
+        H4W3 -->|"Exit /\nWrite-Off"| H5
+        H4 -->|"Not Triggered"| H5
+        H5 --> H6
+        H6 -->|"Hold:\nNo Change"| H7
+        H6 -->|"Routine:\nRebalance"| H7
+    end
+
+    IN --> H1
+    H7 --> O8[/"Performance Report"/]:::output
+    O8 --> END(["END / NEXT CYCLE"]):::terminal
+
+    H6 -.->|"Tactical:\nRebalance\n(Drift > Threshold)"| LOOP1(["Re-enter Step 5.3"]):::terminal
+    H6 -.->|"Strategic:\nStrategy Change\n(Macro Regime Shift)"| LOOP2(["Re-enter Step 3.1"]):::terminal
+    H6 -.->|"Fundamental:\nMandate Review\n(LP Redemption /\nFund Restructure)"| LOOP3(["Re-enter Step 1.1"]):::terminal
+
+    style S8 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+        </pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TABLES -->
+<section class="tables-section">
+  <h2>Reference Tables</h2>
+  <div class="tables-grid">
+    <div class="tbl-card">
+      <h3>Deliverables by Step</h3>
+      <table>
+        <thead><tr><th>Step</th><th>Output Document</th></tr></thead>
+        <tbody>
+          <tr><td>Step 1</td><td>Mandate Statement</td></tr>
+          <tr><td>Step 2</td><td>Investment Policy Framework</td></tr>
+          <tr><td>Step 3</td><td>Eligible Universe</td></tr>
+          <tr><td>Step 4</td><td>Investment Memo &amp; Risk Assessment</td></tr>
+          <tr><td>Step 5</td><td>Approved Position &amp; Audit Trail</td></tr>
+          <tr><td>Step 6</td><td>Pacing Plan</td></tr>
+          <tr><td>Step 7</td><td>Live Portfolio</td></tr>
+          <tr><td>Step 8</td><td>Performance Report</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tbl-card">
+      <h3>Gate Decisions</h3>
+      <table>
+        <thead><tr><th>Gate</th><th>Outcomes</th></tr></thead>
+        <tbody>
+          <tr><td>4.2 E&amp;S Screening</td><td>Pass / Fail (Remediable?) / Reject</td></tr>
+          <tr><td>4.7 Preliminary DD</td><td>Proceed / Kill</td></tr>
+          <tr><td>5.2 IC Approval</td><td>Approved / Conditional / Rejected</td></tr>
+          <tr><td>7.3 CP Satisfaction</td><td>Yes / Renegotiate / Terminate</td></tr>
+          <tr><td>8.5 Watchlist</td><td>Triggered / Not Triggered</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tbl-card">
+      <h3>Feedback Loops</h3>
+      <table>
+        <thead><tr><th>Tier</th><th>Trigger</th><th>Re-entry</th></tr></thead>
+        <tbody>
+          <tr><td>Tactical</td><td>Portfolio drift exceeds threshold</td><td>Step 5.3 (Sizing)</td></tr>
+          <tr><td>Strategic</td><td>Macro regime shift</td><td>Step 3.1 (Sectors)</td></tr>
+          <tr><td>Fundamental</td><td>LP redemption / fund restructure</td><td>Step 1.1 (Principal)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tbl-card">
+      <h3>Portfolio Scope Parameters</h3>
+      <table>
+        <thead><tr><th>Parameter</th><th>Specification</th></tr></thead>
+        <tbody>
+          <tr><td>Asset Class</td><td>EM Infrastructure / Project Finance</td></tr>
+          <tr><td>Sectors</td><td>Power, Transport, Digital, Water, Social</td></tr>
+          <tr><td>Geographies</td><td>Core EM, Frontier, Fragile States</td></tr>
+          <tr><td>Instruments</td><td>Senior Secured, Mezzanine, Equity, Guarantees</td></tr>
+          <tr><td>Risk Framework</td><td>PD/LGD, Internal Risk Grades, IFC PS</td></tr>
+          <tr><td>ESG Standard</td><td>IFC Performance Standards</td></tr>
+          <tr><td>Impact Metrics</td><td>Jobs, CO2, Access (SDG-aligned)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- LEGEND -->
+<section class="legend-section">
+  <h2>Color Legend</h2>
+  <div class="legend-grid">
+    <div class="legend-card">
+      <h3>Node Types</h3>
+      <div class="legend-item"><div class="legend-swatch" style="background:#1e3a5f;border:1px solid #4a6fa5"></div><span>Process Step</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#4a3800;border:1px solid #cc8800"></div><span>Decision / Branching Point</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#1b4332;border:1px solid #2d6a4f"></div><span>Output Document</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#4a1025;border:1px solid #b02a37"></div><span>Screening Gate (Hard Stop)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#3d1f00;border:1px solid #b02a37"></div><span>Workout / Recovery Process</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#455a64;border:1px solid #78909c"></div><span>Terminal (Start / End)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#37474f;border:1px solid #78909c"></div><span>Rejected (Terminal)</span></div>
+    </div>
+
+    <div class="legend-card">
+      <h3>Edge Types</h3>
+      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-top:3px solid #5a7fa5;height:0;margin-top:8px"></div><span>Sequential flow (solid line)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-top:3px dashed #5a7fa5;height:0;margin-top:8px"></div><span>Periodic feedback loop (dotted line)</span></div>
+    </div>
+
+    <div class="legend-card">
+      <h3>Process Phases</h3>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent)"></div><span>Governance &amp; Policy (Steps 1-2)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent-2)"></div><span>Sourcing &amp; Pipeline (Steps 3-4)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--gate)"></div><span>Approval &amp; Construction (Step 5)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent-3)"></div><span>Deployment &amp; Execution (Steps 6-7)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--output)"></div><span>Monitoring &amp; Reporting (Step 8)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  EM Infrastructure Portfolio Process v3 &nbsp;|&nbsp; Generated from <a href="#">em_infra_v3.mermaid</a>
+</footer>
+
+<!-- FULLSCREEN OVERLAY -->
+<div class="fullscreen-overlay" id="fs-overlay">
+  <button class="close-fs" onclick="closeFs()">&times;</button>
+  <div class="mermaid-fs" id="fs-content"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+// Load mermaid from CDN with fallback
+function loadMermaid(cb) {
+  var urls = [
+    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js'
+  ];
+  function tryNext(i) {
+    if (i >= urls.length) {
+      document.querySelectorAll('.diagram-body').forEach(function(el) {
+        el.innerHTML = '<p style="color:#f87171;padding:20px;">Could not load Mermaid library. Check network/ad-blocker settings.</p>';
+      });
+      return;
+    }
+    var s = document.createElement('script');
+    s.src = urls[i];
+    s.onload = cb;
+    s.onerror = function() { tryNext(i + 1); };
+    document.head.appendChild(s);
+  }
+  tryNext(0);
+}
+
+loadMermaid(function() {
+  var mermaidConfig = {
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#1e3a5f',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#4a6fa5',
+      lineColor: '#5a7fa5',
+      secondaryColor: '#1a2332',
+      tertiaryColor: '#2a3a50',
+      background: '#151c25',
+      mainBkg: '#1e3a5f',
+      nodeBorder: '#4a6fa5',
+      clusterBkg: '#1a2332',
+      clusterBorder: '#2a3a50',
+      titleColor: '#e2e8f0',
+      edgeLabelBackground: '#1a2332'
+    },
+    flowchart: { htmlLabels: true, curve: 'basis' },
+    securityLevel: 'loose'
+  };
+
+  mermaid.initialize(mermaidConfig);
+
+  // Render all diagrams manually
+  var diagrams = document.querySelectorAll('pre.mermaid');
+  diagrams.forEach(function(el, idx) {
+    var src = el.textContent.trim();
+    var id = 'mermaid-render-' + idx;
+    try {
+      // mermaid v10 uses callback style
+      if (mermaid.render.length > 2 || typeof mermaid.render === 'function') {
+        mermaid.render(id, src).then(function(result) {
+          el.innerHTML = result.svg;
+          el.removeAttribute('data-processed');
+        }).catch(function(err) {
+          console.warn('Diagram ' + idx + ' error:', err);
+          el.innerHTML = '<p style="color:#f87171">Error rendering diagram</p>';
+        });
+      }
+    } catch(e) {
+      // Fallback: just let mermaid process it on load
+      console.warn('Render error, trying startOnLoad fallback', e);
+      mermaid.initialize(Object.assign({}, mermaidConfig, { startOnLoad: true }));
+      mermaid.contentLoaded();
+    }
+  });
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+      btn.classList.add('active');
+      var target = document.getElementById('tab-' + btn.dataset.tab);
+      target.classList.add('active');
+
+      // Re-render diagrams in newly visible tab
+      var preTags = target.querySelectorAll('pre.mermaid');
+      preTags.forEach(function(pre, i) {
+        // Only re-render if it still has text content (not yet rendered SVG)
+        if (pre.querySelector('svg')) return;
+        var src = pre.textContent.trim();
+        if (!src) return;
+        var rid = 'tab-render-' + btn.dataset.tab + '-' + i + '-' + Date.now();
+        mermaid.render(rid, src).then(function(result) {
+          pre.innerHTML = result.svg;
+        }).catch(function() {});
+      });
+    });
+  });
+
+  // Store raw source for copy/fullscreen
+  window._diaSources = {};
+  document.querySelectorAll('pre.mermaid').forEach(function(el) {
+    // Store before first render overwrites textContent
+    if (el.id && !el.querySelector('svg')) {
+      window._diaSources[el.id] = el.textContent.trim();
+    }
+  });
+});
+
+// Store sources immediately before mermaid loads
+window._diaSources = {};
+document.querySelectorAll('pre.mermaid').forEach(function(el) {
+  if (el.id) {
+    window._diaSources[el.id] = el.textContent.trim();
+  }
+});
+
+// Copy source
+function copySrc(id) {
+  var key = 'dia-' + id;
+  var text = window._diaSources[key] || '';
+  if (!text) {
+    var el = document.getElementById(key);
+    text = el ? el.textContent.trim() : '';
+  }
+  navigator.clipboard.writeText(text).then(function() {
+    var toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2000);
+  });
+}
+
+// Fullscreen
+function openFs(id) {
+  var key = 'dia-' + id;
+  var src = window._diaSources[key] || '';
+  if (!src) return;
+  var overlay = document.getElementById('fs-overlay');
+  var content = document.getElementById('fs-content');
+
+  if (typeof mermaid !== 'undefined') {
+    mermaid.render('fs-render-' + Date.now(), src).then(function(result) {
+      content.innerHTML = result.svg;
+    }).catch(function() {
+      content.innerHTML = '<p style="color:#f87171">Error rendering diagram</p>';
+    });
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFs() {
+  document.getElementById('fs-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeFs(); });
+</script>
+</body>
+</html>
