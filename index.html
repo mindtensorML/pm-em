@@ -4,522 +4,147 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EM Infrastructure Portfolio Process v3</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-:root {
-  --bg: #0c1117;
-  --surface: #151c25;
-  --surface-2: #1a2332;
-  --surface-3: #1f2b3d;
-  --border: #2a3a50;
-  --border-light: #334563;
-  --text: #e2e8f0;
-  --text-muted: #8899ae;
-  --text-dim: #5a6f88;
-  --accent: #4db8a4;
-  --accent-glow: rgba(77,184,164,0.15);
-  --accent-2: #6c8cff;
-  --accent-3: #e8a838;
-  --gate: #c084fc;
-  --gate-glow: rgba(192,132,252,0.12);
-  --reject: #f87171;
-  --workout: #fb923c;
-  --output: #34d399;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --radius-xs: 6px;
-  --font: 'DM Sans', sans-serif;
-  --font-display: 'Playfair Display', serif;
-  --font-mono: 'JetBrains Mono', monospace;
-  --shadow: 0 4px 24px rgba(0,0,0,0.3);
-  --shadow-lg: 0 8px 48px rgba(0,0,0,0.4);
-}
+:root { --bg:#F7F5F0; --paper:#FFFFFF; --ink:#13202F; --muted:#5D6B7A; --faint:#8A95A3; --rule:#E6E1D8; --accent:#1F3A5F; --gold:#A8874F;
+  --serif:"Fraunces", Georgia, serif; --sans:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"JetBrains Mono", ui-monospace, monospace;
+  /* muted phase and status tones (legacy names kept for inline styles) */
+  --accent-2:#5B7FA6; --accent-3:#A8874F; --gate:#7A63A0; --output:#4F8A63; --reject:#B0574A; --workout:#C07A3E; --text-dim:#8A95A3;
+  --track:#EEEAE2;
+  --chip-blue-bg:#E3EBF4; --chip-blue-fg:#1F3A5F; --chip-purple-bg:#EBE5F3; --chip-purple-fg:#4B3576; --chip-green-bg:#E2EFE6; --chip-green-fg:#2D5F3D; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0F151C; --paper:#151D26; --ink:#E8E4DC; --muted:#A3ADB8; --faint:#7D8894; --rule:#26313C; --accent:#9DB8DA; --gold:#C9A86E;
+  --accent-2:#8FA9C9; --accent-3:#C9A86E; --gate:#A994C9; --output:#7FB08F; --reject:#D38A7E; --workout:#D9A070; --text-dim:#7D8894; --track:#1E2833;
+  --chip-blue-bg:#1E2B3B; --chip-blue-fg:#B5C9E3; --chip-purple-bg:#2A2238; --chip-purple-fg:#CDBDE6; --chip-green-bg:#1C2E24; --chip-green-fg:#A9D4B5; } }
+:root[data-theme="dark"] { --bg:#0F151C; --paper:#151D26; --ink:#E8E4DC; --muted:#A3ADB8; --faint:#7D8894; --rule:#26313C; --accent:#9DB8DA; --gold:#C9A86E;
+  --accent-2:#8FA9C9; --accent-3:#C9A86E; --gate:#A994C9; --output:#7FB08F; --reject:#D38A7E; --workout:#D9A070; --text-dim:#7D8894; --track:#1E2833;
+  --chip-blue-bg:#1E2B3B; --chip-blue-fg:#B5C9E3; --chip-purple-bg:#2A2238; --chip-purple-fg:#CDBDE6; --chip-green-bg:#1C2E24; --chip-green-fg:#A9D4B5; }
 
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+
+/* ===== TOP BAR ===== */
+.mt-top { border-bottom:1px solid var(--rule); background:var(--paper); }
+.mt-top .in { max-width:1320px; margin:0 auto; padding:12px 16px; display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:space-between; font:13px/1.5 var(--sans); color:var(--muted); }
+.mt-top b { color:var(--ink); font-weight:600; } .mt-top a { color:var(--accent); text-decoration:none; }
 
 /* ===== HERO ===== */
-.hero {
-  position: relative;
-  padding: 80px 40px 60px;
-  text-align: center;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(77,184,164,0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 60% at 80% 30%, rgba(108,140,255,0.05) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero-badge {
-  display: inline-block;
-  padding: 6px 16px;
-  background: var(--accent-glow);
-  border: 1px solid rgba(77,184,164,0.25);
-  border-radius: 100px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 24px;
-}
-.hero h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 800;
-  line-height: 1.15;
-  color: #fff;
-  margin-bottom: 12px;
-}
-.hero h1 span { color: var(--accent); }
-.hero-sub {
-  font-size: 1.05rem;
-  color: var(--text-muted);
-  max-width: 640px;
-  margin: 0 auto 40px;
-}
+.hero { max-width:1320px; margin:0 auto; padding:56px 16px 8px; text-align:left; }
+.eyebrow { font-size:12px; letter-spacing:1.6px; text-transform:uppercase; color:var(--gold); font-weight:600; }
+.hero h1 { font-family:var(--serif); font-weight:500; font-size:clamp(34px,5vw,54px); line-height:1.05; letter-spacing:-.6px; color:var(--ink); margin:12px 0 14px; }
+.hero h1 span { color:inherit; }
+.subtitle { font-family:var(--serif); font-weight:400; font-size:clamp(18px,2.2vw,22px); line-height:1.4; color:var(--muted); max-width:760px; margin:0 0 14px; }
+.meta { font-size:13px; color:var(--faint); margin-bottom:18px; }
+.hero-sub { font-size:16px; color:var(--ink); max-width:760px; margin:0; }
 
 /* Stats row */
-.stats-row {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 0;
-}
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 20px 28px;
-  min-width: 130px;
-  text-align: center;
-  transition: border-color 0.3s, transform 0.3s;
-}
-.stat-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-.stat-num {
-  font-family: var(--font-mono);
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1;
-}
-.stat-num.accent { color: var(--accent); }
-.stat-num.accent2 { color: var(--accent-2); }
-.stat-num.accent3 { color: var(--accent-3); }
-.stat-num.gate-c { color: var(--gate); }
-.stat-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-top: 6px;
-}
+.stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin:32px 0 0; }
+.stat-card { padding:18px 16px 16px 0; }
+.stat-num { font-family:var(--serif); font-weight:500; font-size:40px; line-height:1; letter-spacing:-.5px; color:var(--ink); }
+.stat-label { margin-top:8px; font-size:12.5px; color:var(--muted); }
 
 /* ===== OVERVIEW CARDS ===== */
-.overview-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 48px 24px;
-}
-.overview-section h2 {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  color: #fff;
-  margin-bottom: 24px;
-}
-.cards-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 16px;
-}
-.ov-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px;
-  transition: border-color 0.3s;
-}
-.ov-card:hover { border-color: var(--border-light); }
-.ov-card h3 {
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-}
-.ov-card .big-num {
-  font-family: var(--font-mono);
-  font-size: 2.4rem;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1;
-  margin-bottom: 12px;
-}
-
-/* Step list inside overview cards */
-.step-list { list-style: none; }
-.step-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 6px 0;
-  font-size: 0.88rem;
-  color: var(--text-muted);
-}
-.step-list .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-top: 7px;
-  flex-shrink: 0;
-}
-
-/* Bar chart */
-.bar-chart { margin-top: 12px; }
-.bar-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-.bar-label {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  width: 100px;
-  text-align: right;
-  flex-shrink: 0;
-}
-.bar-track {
-  flex: 1;
-  height: 8px;
-  background: var(--surface-3);
-  border-radius: 100px;
-  overflow: hidden;
-}
-.bar-fill {
-  height: 100%;
-  border-radius: 100px;
-  transition: width 1s ease;
-}
+.overview-section { max-width:1320px; margin:0 auto; padding:32px 16px 48px; }
+.cards-row { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(320px,100%), 1fr)); gap:16px; }
+.ov-card { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:24px; }
+.ov-card h3 { font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); margin-bottom:12px; }
+.ov-card .big-num { font-family:var(--serif); font-size:28px; font-weight:500; color:var(--ink); line-height:1.1; margin-bottom:12px; }
+.step-list { list-style:none; }
+.step-list li { display:flex; align-items:flex-start; gap:10px; padding:5px 0; font-size:14px; color:var(--muted); }
+.step-list .dot { width:8px; height:8px; border-radius:50%; margin-top:8px; flex-shrink:0; }
 
 /* ===== TABS ===== */
-.tabs-section {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 24px 48px;
-}
-.tabs-header {
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 32px;
-  scrollbar-width: none;
-}
-.tabs-header::-webkit-scrollbar { display: none; }
-.tab-btn {
-  background: transparent;
-  border: none;
-  padding: 12px 18px;
-  font-family: var(--font);
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--text-dim);
-  cursor: pointer;
-  white-space: nowrap;
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-}
-.tab-btn:hover { color: var(--text-muted); }
-.tab-btn.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
+.tabs-section { max-width:1320px; margin:0 auto; padding:0 16px 48px; }
+.tabs-header { display:flex; gap:4px; overflow-x:auto; background:var(--paper); border:1px solid var(--rule); border-radius:12px 12px 0 0; padding:0 8px; margin-bottom:32px; scrollbar-width:none; }
+.tabs-header::-webkit-scrollbar { display:none; }
+.tab-btn { background:transparent; border:none; padding:14px 14px 12px; font-family:var(--sans); font-size:14px; font-weight:500; color:var(--muted); cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; transition:color .2s, border-color .2s; }
+.tab-btn:hover { color:var(--ink); }
+.tab-btn.active { color:var(--ink); border-bottom-color:var(--gold); }
 
-/* Tab content */
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-.tab-meta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-.tab-meta h2 {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  color: #fff;
-}
-.tab-meta .tag {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 100px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-.tag-scope { background: rgba(77,184,164,0.12); color: var(--accent); border: 1px solid rgba(77,184,164,0.2); }
-.tag-steps { background: rgba(108,140,255,0.12); color: var(--accent-2); border: 1px solid rgba(108,140,255,0.2); }
-.tag-gate { background: var(--gate-glow); color: var(--gate); border: 1px solid rgba(192,132,252,0.25); }
-.tab-desc {
-  font-size: 0.92rem;
-  color: var(--text-muted);
-  margin-bottom: 24px;
-  max-width: 800px;
-}
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+.tab-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:12px; }
+.tab-meta h2 { font-family:var(--serif); font-weight:500; font-size:30px; letter-spacing:-.3px; line-height:1.15; color:var(--ink); }
+.tab-meta .tag { display:inline-flex; align-items:center; padding:3px 10px; border-radius:999px; font-size:11.5px; font-weight:600; letter-spacing:.2px; white-space:nowrap; }
+.tag-scope { background:var(--chip-green-bg); color:var(--chip-green-fg); }
+.tag-steps { background:var(--chip-blue-bg); color:var(--chip-blue-fg); }
+.tag-gate { background:var(--chip-purple-bg); color:var(--chip-purple-fg); }
+.tab-desc { font-size:15px; color:var(--muted); margin-bottom:22px; max-width:760px; }
 
-/* Diagram container */
-.diagram-wrap {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.diagram-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface-2);
-}
-.tool-btn {
-  background: var(--surface-3);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-family: var(--font);
-  font-size: 0.75rem;
-  padding: 5px 12px;
-  border-radius: var(--radius-xs);
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.tool-btn:hover { background: var(--border); color: var(--text); }
-.diagram-body {
-  padding: 32px;
-  overflow-x: auto;
-  display: flex;
-  justify-content: center;
-  min-height: 300px;
-}
-.diagram-body .mermaid { width: 100%; }
+/* Diagram container (white in both modes so Mermaid colours read correctly) */
+.diagram-wrap { position:relative; background:#FFFFFF; border:1px solid var(--rule); border-radius:14px; overflow:hidden; }
+.diagram-toolbar { display:flex; justify-content:flex-end; gap:8px; padding:10px 14px; border-bottom:1px solid var(--rule); background:var(--paper); }
+.tool-btn { background:var(--paper); border:1px solid var(--rule); color:var(--muted); font-family:var(--sans); font-size:12.5px; font-weight:500; padding:5px 12px; border-radius:8px; cursor:pointer; transition:border-color .2s, color .2s; }
+.tool-btn:hover { border-color:var(--gold); color:var(--ink); }
+.diagram-body { padding:28px; overflow-x:auto; display:flex; justify-content:center; min-height:300px; background:#FFFFFF; }
+.diagram-body .mermaid { width:100%; background:transparent; display:flex; justify-content:center; }
 
 /* Fullscreen overlay */
-.fullscreen-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: var(--bg);
-  overflow: auto;
-  padding: 20px;
-}
-.fullscreen-overlay.open { display: flex; align-items: center; justify-content: center; }
-.fullscreen-overlay .close-fs {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-size: 1.2rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1001;
-}
-.fullscreen-overlay .mermaid-fs { padding: 40px; }
+.fullscreen-overlay { display:none; position:fixed; inset:0; z-index:1000; background:#FFFFFF; overflow:auto; padding:20px; }
+.fullscreen-overlay.open { display:flex; align-items:center; justify-content:center; }
+.fullscreen-overlay .close-fs { position:fixed; top:16px; right:16px; background:#FFFFFF; border:1px solid #E6E1D8; color:#13202F; font-size:1.2rem; width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:1001; }
+.fullscreen-overlay .mermaid-fs { padding:40px; }
 
 /* ===== TABLES ===== */
-.tables-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px 60px;
-}
-.tables-section h2 {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  color: #fff;
-  margin-bottom: 24px;
-}
-.tables-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 16px;
-  margin-bottom: 40px;
-}
-.tbl-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.tbl-card h3 {
-  padding: 16px 20px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface-2);
-}
-.tbl-card table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
-}
-.tbl-card th, .tbl-card td {
-  padding: 10px 20px;
-  text-align: left;
-  border-bottom: 1px solid rgba(42,58,80,0.5);
-}
-.tbl-card th {
-  color: var(--text-dim);
-  font-weight: 500;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.tbl-card td { color: var(--text-muted); }
-.tbl-card tr:last-child td { border-bottom: none; }
-.tbl-card td:first-child { color: var(--text); font-weight: 500; }
+.tables-section, .legend-section { max-width:1320px; margin:0 auto; padding:24px 16px 48px; }
+.tables-section h2, .legend-section h2 { font-family:var(--serif); font-weight:500; font-size:30px; letter-spacing:-.3px; line-height:1.15; color:var(--ink); margin-bottom:22px; }
+.tables-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(360px,100%), 1fr)); gap:16px; margin-bottom:24px; }
+.tbl-card { background:var(--paper); border:1px solid var(--rule); border-radius:14px; overflow:hidden; }
+.tbl-card h3 { padding:14px 20px; font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); border-bottom:1px solid var(--rule); }
+.tbl-card table { width:100%; border-collapse:collapse; font-size:14px; }
+.tbl-card th, .tbl-card td { padding:10px 20px; text-align:left; border-bottom:1px solid var(--rule); vertical-align:top; }
+.tbl-card th { color:var(--faint); font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.8px; }
+.tbl-card td { color:var(--muted); }
+.tbl-card tr:last-child td { border-bottom:none; }
+.tbl-card td:first-child { color:var(--ink); font-weight:500; }
 
 /* ===== LEGEND ===== */
-.legend-section {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px 80px;
-}
-.legend-section h2 {
-  font-family: var(--font-display);
-  font-size: 1.4rem;
-  color: #fff;
-  margin-bottom: 24px;
-}
-.legend-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-}
-.legend-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-}
-.legend-card h3 {
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 16px;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 0;
-}
-.legend-swatch {
-  width: 28px;
-  height: 16px;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-.legend-item span {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
+.legend-section { padding-bottom:64px; }
+.legend-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(280px,100%), 1fr)); gap:16px; }
+.legend-card { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:22px 24px; }
+.legend-card h3 { font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); margin-bottom:14px; }
+.legend-item { display:flex; align-items:center; gap:12px; padding:6px 0; }
+.legend-swatch { width:28px; height:16px; border-radius:4px; flex-shrink:0; }
+.legend-item span { font-size:14px; color:var(--muted); }
 
 /* ===== FOOTER ===== */
-footer {
-  text-align: center;
-  padding: 32px 24px;
-  border-top: 1px solid var(--border);
-  color: var(--text-dim);
-  font-size: 0.78rem;
-}
-footer a { color: var(--accent); text-decoration: none; }
+footer { max-width:1320px; margin:0 auto; padding:20px 16px 40px; border-top:1px solid var(--rule); color:var(--faint); font-size:13px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; }
+footer a { color:var(--accent); text-decoration:none; }
 
 /* Toast */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--surface-2);
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  padding: 10px 20px;
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
-  font-weight: 500;
-  z-index: 2000;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s, transform 0.3s;
-  pointer-events: none;
-}
-.toast.show { opacity: 1; transform: translateY(0); }
+.toast { position:fixed; bottom:24px; right:24px; background:var(--paper); border:1px solid var(--rule); color:var(--ink); padding:10px 18px; border-radius:10px; font-size:13px; font-weight:500; z-index:2000; opacity:0; transform:translateY(10px); transition:opacity .3s, transform .3s; pointer-events:none; }
+.toast.show { opacity:1; transform:translateY(0); }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .hero { padding: 48px 20px 40px; }
-  .stats-row { gap: 8px; }
-  .stat-card { padding: 14px 18px; min-width: 100px; }
-  .stat-num { font-size: 1.4rem; }
-  .diagram-body { padding: 16px; }
-  .tab-btn { padding: 10px 12px; font-size: 0.75rem; }
+  .hero { padding:40px 16px 8px; }
+  .stats-row { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .stat-num { font-size:34px; }
+  .diagram-body { padding:16px; }
+  .tab-btn { padding:12px 10px 10px; font-size:13.5px; }
+  .tab-meta h2, .tables-section h2, .legend-section h2 { font-size:26px; }
 }
 
-/* Mermaid overrides for dark theme */
-.diagram-body .mermaid svg {
-  max-width: 100%;
-  height: auto;
-}
+.diagram-body .mermaid svg { max-width:100%; height:auto; }
 </style>
 </head>
 <body>
-<div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:13px;line-height:1.45;background:#f6f7f9;color:#1f2933;border-bottom:1px solid #d9dde3;padding:10px 16px;"><div style="font-weight:600">How to run an emerging-market infrastructure portfolio from mandate to watchlist, written as a process an AI agent can follow.</div><div style="color:#52606d;margin-top:2px">By Caesar Rana, CFA. Built at SpaceXAI and shared with permission. <a href="https://mindtensorml.github.io/" style="color:#1d4e89">See all process maps</a></div></div>
-
+<div class="mt-top"><div class="in"><span><b>mindtensorML</b> · Process maps for AI in investment work</span><span>By Caesar Rana, CFA, APMG CP3P · <a href="https://mindtensorml.github.io/">All maps</a></span></div></div>
 
 <!-- HERO -->
 <header class="hero">
-  <div class="hero-badge">Process Framework v3</div>
+  <div class="eyebrow">Emerging markets · Infrastructure portfolio</div>
   <h1>EM Infrastructure <span>Portfolio Process</span></h1>
+  <p class="subtitle">How to run an emerging-market infrastructure portfolio from mandate to watchlist, written as a process an AI agent can follow.</p>
+  <div class="meta">Process framework v3</div>
   <p class="hero-sub">Build and manage a diversified EM infrastructure / project finance portfolio with allocation, risk budgeting, and performance reporting.</p>
   <div class="stats-row">
-    <div class="stat-card"><div class="stat-num accent">8</div><div class="stat-label">Steps</div></div>
-    <div class="stat-card"><div class="stat-num accent2">5</div><div class="stat-label">Gates</div></div>
-    <div class="stat-card"><div class="stat-num accent3">8</div><div class="stat-label">Outputs</div></div>
-    <div class="stat-card"><div class="stat-num gate-c">3</div><div class="stat-label">Feedback Loops</div></div>
+    <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Steps</div></div>
+    <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Gates</div></div>
+    <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Outputs</div></div>
+    <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Feedback Loops</div></div>
     <div class="stat-card"><div class="stat-num">52</div><div class="stat-label">Process Nodes</div></div>
   </div>
 </header>
@@ -552,37 +177,6 @@ footer a { color: var(--accent); text-decoration: none; }
         <li><span class="dot" style="background:var(--accent)"></span>Watchlist Trigger</li>
       </ul>
     </div>
-
-    <!-- Card 3: Node Types -->
-    <div class="ov-card">
-      <h3>Node Type Breakdown</h3>
-      <div class="bar-chart">
-        <div class="bar-row">
-          <span class="bar-label">Process</span>
-          <div class="bar-track"><div class="bar-fill" style="width:70%;background:var(--accent-2)"></div></div>
-        </div>
-        <div class="bar-row">
-          <span class="bar-label">Decision</span>
-          <div class="bar-track"><div class="bar-fill" style="width:22%;background:var(--accent-3)"></div></div>
-        </div>
-        <div class="bar-row">
-          <span class="bar-label">Output</span>
-          <div class="bar-track"><div class="bar-fill" style="width:16%;background:var(--output)"></div></div>
-        </div>
-        <div class="bar-row">
-          <span class="bar-label">Gate</span>
-          <div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--reject)"></div></div>
-        </div>
-        <div class="bar-row">
-          <span class="bar-label">Workout</span>
-          <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--workout)"></div></div>
-        </div>
-        <div class="bar-row">
-          <span class="bar-label">Terminal</span>
-          <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--text-dim)"></div></div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -611,135 +205,17 @@ footer a { color: var(--accent); text-decoration: none; }
       </div>
       <div class="diagram-body">
         <pre class="mermaid" id="dia-master">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
 flowchart TD
-    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
-    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
-    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
-    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
-    classDef gate fill:#4a1025,stroke:#b02a37,stroke-width:2px,color:#f8d7da
-    classDef workout fill:#3d1f00,stroke:#b02a37,stroke-width:1.5px,color:#ffcdd2
-    classDef rejected fill:#37474f,stroke:#78909c,stroke-width:2px,color:#b0bec5
-
+    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
+    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
+    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
+    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
+    classDef gate fill:#F6E3DF,stroke:#8A2F22,stroke-width:2px,color:#5C1F16
+    classDef workout fill:#F6EDD6,stroke:#8A2F22,stroke-width:1.5px,color:#7A5A12
+    classDef rejected fill:#EFEBE4,stroke:#8A2F22,stroke-width:2px,color:#8A2F22
     START(["START"]):::terminal
     REJECTED(["DEAL REJECTED"]):::rejected
-
-    START --> A1
-
-    subgraph S1["STEP 1: MANDATE & GOVERNANCE"]
-        A1["1.1 Identify Principal"]:::process
-        A2["1.2 Define Beneficiaries"]:::process
-        A3["1.3 Set Capital Objectives"]:::process
-        A4["1.4 Establish Governance"]:::process
-        A5["1.5 Portfolio Architecture"]:::process
-        A6["1.6 Formalize Mandate"]:::process
-        A1 --> A2 --> A3
-        A1 --> A4
-        A2 --> A4
-        A3 --> A5
-        A4 --> A5
-        A5 --> A6
-    end
-
-    A6 --> O1[/"Mandate Statement"/]:::output
-    O1 --> B1
-
-    subgraph S2["STEP 2: INVESTMENT POLICY"]
-        B1["2.1 Return Objective"]:::process
-        B2["2.2 Risk Parameters"]:::process
-        B2a["2.3 ESG & Impact Framework"]:::process
-        B3["2.4 Time Horizon"]:::process
-        B4["2.5 Constraints"]:::process
-        B5["2.6 Select Benchmark"]:::process
-        B6["2.7 Formalize Policy"]:::process
-        B1 --> B2 --> B2a --> B3 --> B4 --> B5 --> B6
-    end
-
-    B6 --> O2[/"Investment Policy"/]:::output
-    O2 --> C1
-
-    subgraph S3["STEP 3: OPPORTUNITY SET"]
-        C1["3.1 Sector Tiers"]:::process
-        C2["3.2 Geography Tiers"]:::process
-        C3["3.3 Instrument Menu"]:::process
-        C4["3.4 Currency & Hedging"]:::process
-        C5["3.5 Sourcing Channels"]:::process
-        C6["3.6 Formalize Universe"]:::process
-        C1 --> C2 --> C3 --> C4 --> C5 --> C6
-    end
-
-    C6 --> O3[/"Eligible Universe"/]:::output
-    O3 --> D1
-
-    subgraph S4["STEP 4: PIPELINE & THESIS"]
-        D1["4.1 Origination"]:::process
-        D2{"4.2 GATE: E&S"}:::gate
-        D2R{"4.3 Remediable?"}:::decision
-        D3["4.4 Research"]:::process
-        D4["4.5 Political Risk"]:::process
-        D5["4.6 Preliminary DD"]:::process
-        D6{"4.7 GATE: DD?"}:::decision
-        D7["4.8 Detailed DD"]:::process
-        D8["4.9 Investment Memo"]:::process
-        D9["4.10 Valuation & Rating"]:::process
-        D1 --> D2
-        D2 -->|"Pass"| D3
-        D2 -->|"Fail"| D2R
-        D2R -->|"Restructure"| D1
-        D3 --> D4 --> D5 --> D6
-        D6 -->|"Proceed"| D7 --> D8 --> D9
-    end
-
-    D2R -->|"No"| REJECTED
-    D6 -->|"Kill"| REJECTED
-
-    D9 --> O4[/"Memo & Assessment"/]:::output
-    O4 --> E1
-
-    subgraph S5["STEP 5: APPROVAL & CONSTRUCTION"]
-        E1["5.1 IC Review"]:::process
-        E2{"5.2 IC Approval"}:::decision
-        E3["5.3 Portfolio Sizing"]:::process
-        E4["5.4 Stress Test"]:::process
-        E5["5.5 Finalize Portfolio"]:::process
-        E1 --> E2
-        E2 -->|"Approved"| E3
-        E2 -->|"Conditional"| D8
-        E3 --> E4 --> E5
-    end
-
-    E2 -->|"Rejected"| REJECTED
-
-    E5 --> O5[/"Approved Position"/]:::output
-    O5 --> F1
-
-    subgraph S6["STEP 6: DEPLOYMENT PACING"]
-        F1["6.1 Commitment Schedule"]:::process
-        F2["6.2 J-Curve Projection"]:::process
-        F3["6.3 Liquidity Buffer"]:::process
-        F4["6.4 Recycling Policy"]:::process
-        F1 --> F2 --> F3 --> F4
-    end
-
-    F4 --> O6[/"Pacing Plan"/]:::output
-    O6 --> G1
-
-    subgraph S7["STEP 7: EXECUTION & CLOSE"]
-        G1["7.1 Negotiation"]:::process
-        G2["7.2 Conditions Precedent"]:::process
-        G3{"7.3 CP Satisfied?"}:::decision
-        G4["7.4 Financial Close"]:::process
-        G5["7.5 Booking & Trustee"]:::process
-        G1 --> G2 --> G3
-        G3 -->|"Yes"| G4
-        G3 -->|"Renegotiate"| G1
-        G3 -->|"Terminate"| REJECTED
-        G4 --> G5
-    end
-
-    G5 --> O7[/"Live Portfolio"/]:::output
-    O7 --> H1
-
     subgraph S8["STEP 8: MONITORING & REPORTING"]
         H1["8.1 Track KPIs"]:::process
         H2["8.2 Attribution"]:::process
@@ -760,6 +236,124 @@ flowchart TD
         H5 --> H6
         H6 -->|"Hold"| H7
     end
+    subgraph S7["STEP 7: EXECUTION & CLOSE"]
+        G1["7.1 Negotiation"]:::process
+        G2["7.2 Conditions Precedent"]:::process
+        G3{"7.3 CP Satisfied?"}:::decision
+        G4["7.4 Financial Close"]:::process
+        G5["7.5 Booking & Trustee"]:::process
+        G1 --> G2 --> G3
+        G3 -->|"Yes"| G4
+        G3 -->|"Renegotiate"| G1
+        G3 -->|"Terminate"| REJECTED
+        G4 --> G5
+    end
+    subgraph S6["STEP 6: DEPLOYMENT PACING"]
+        F1["6.1 Commitment Schedule"]:::process
+        F2["6.2 J-Curve Projection"]:::process
+        F3["6.3 Liquidity Buffer"]:::process
+        F4["6.4 Recycling Policy"]:::process
+        F1 --> F2 --> F3 --> F4
+    end
+    subgraph S5["STEP 5: APPROVAL & CONSTRUCTION"]
+        E1["5.1 IC Review"]:::process
+        E2{"5.2 IC Approval"}:::decision
+        E3["5.3 Portfolio Sizing"]:::process
+        E4["5.4 Stress Test"]:::process
+        E5["5.5 Finalize Portfolio"]:::process
+        E1 --> E2
+        E2 -->|"Approved"| E3
+        E2 -->|"Conditional"| D8
+        E3 --> E4 --> E5
+    end
+    subgraph S4["STEP 4: PIPELINE & THESIS"]
+        D1["4.1 Origination"]:::process
+        D2{"4.2 GATE: E&S"}:::gate
+        D2R{"4.3 Remediable?"}:::decision
+        D3["4.4 Research"]:::process
+        D4["4.5 Political Risk"]:::process
+        D5["4.6 Preliminary DD"]:::process
+        D6{"4.7 GATE: DD?"}:::decision
+        D7["4.8 Detailed DD"]:::process
+        D8["4.9 Investment Memo"]:::process
+        D9["4.10 Valuation & Rating"]:::process
+        D1 --> D2
+        D2 -->|"Pass"| D3
+        D2 -->|"Fail"| D2R
+        D2R -->|"Restructure"| D1
+        D3 --> D4 --> D5 --> D6
+        D6 -->|"Proceed"| D7 --> D8 --> D9
+    end
+    subgraph S3["STEP 3: OPPORTUNITY SET"]
+        C1["3.1 Sector Tiers"]:::process
+        C2["3.2 Geography Tiers"]:::process
+        C3["3.3 Instrument Menu"]:::process
+        C4["3.4 Currency & Hedging"]:::process
+        C5["3.5 Sourcing Channels"]:::process
+        C6["3.6 Formalize Universe"]:::process
+        C1 --> C2 --> C3 --> C4 --> C5 --> C6
+    end
+    subgraph S2["STEP 2: INVESTMENT POLICY"]
+        B1["2.1 Return Objective"]:::process
+        B2["2.2 Risk Parameters"]:::process
+        B2a["2.3 ESG & Impact Framework"]:::process
+        B3["2.4 Time Horizon"]:::process
+        B4["2.5 Constraints"]:::process
+        B5["2.6 Select Benchmark"]:::process
+        B6["2.7 Formalize Policy"]:::process
+        B1 --> B2 --> B2a --> B3 --> B4 --> B5 --> B6
+    end
+    subgraph S1["STEP 1: MANDATE & GOVERNANCE"]
+        A1["1.1 Identify Principal"]:::process
+        A2["1.2 Define Beneficiaries"]:::process
+        A3["1.3 Set Capital Objectives"]:::process
+        A4["1.4 Establish Governance"]:::process
+        A5["1.5 Portfolio Architecture"]:::process
+        A6["1.6 Formalize Mandate"]:::process
+        A1 --> A2 --> A3
+        A1 --> A4
+        A2 --> A4
+        A3 --> A5
+        A4 --> A5
+        A5 --> A6
+    end
+
+
+    START --> A1
+
+
+    A6 --> O1[/"Mandate Statement"/]:::output
+    O1 --> B1
+
+
+    B6 --> O2[/"Investment Policy"/]:::output
+    O2 --> C1
+
+
+    C6 --> O3[/"Eligible Universe"/]:::output
+    O3 --> D1
+
+
+    D2R -->|"No"| REJECTED
+    D6 -->|"Kill"| REJECTED
+
+    D9 --> O4[/"Memo & Assessment"/]:::output
+    O4 --> E1
+
+
+    E2 -->|"Rejected"| REJECTED
+
+    E5 --> O5[/"Approved Position"/]:::output
+    O5 --> F1
+
+
+    F4 --> O6[/"Pacing Plan"/]:::output
+    O6 --> G1
+
+
+    G5 --> O7[/"Live Portfolio"/]:::output
+    O7 --> H1
+
 
     H6 -->|"Rebalance"| H7
     H7 --> O8[/"Performance Report"/]:::output
@@ -786,11 +380,11 @@ flowchart TD
       </div>
       <div class="diagram-body">
         <pre class="mermaid" id="dia-mandate">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
 flowchart TD
-    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
-    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
-    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
+    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
+    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
+    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
 
     START(["Foundation"]):::terminal
 
@@ -832,8 +426,8 @@ flowchart TD
     B6 --> O2[/"Investment Policy Framework"/]:::output
     O2 --> NEXT(["Proceed to Step 3"]):::terminal
 
-    style S1 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
-    style S2 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+    style S1 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
+    style S2 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
         </pre>
       </div>
     </div>
@@ -854,14 +448,14 @@ flowchart TD
       </div>
       <div class="diagram-body">
         <pre class="mermaid" id="dia-sourcing">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
 flowchart TD
-    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
-    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
-    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
-    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
-    classDef gate fill:#4a1025,stroke:#b02a37,stroke-width:2px,color:#f8d7da
-    classDef rejected fill:#37474f,stroke:#78909c,stroke-width:2px,color:#b0bec5
+    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
+    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
+    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
+    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
+    classDef gate fill:#F6E3DF,stroke:#8A2F22,stroke-width:2px,color:#5C1F16
+    classDef rejected fill:#EFEBE4,stroke:#8A2F22,stroke-width:2px,color:#8A2F22
 
     IN(["From Investment Policy"]):::terminal
     REJECTED(["DEAL REJECTED"]):::rejected
@@ -908,8 +502,8 @@ flowchart TD
     D9 --> O4[/"Investment Memo\n& Risk Assessment"/]:::output
     O4 --> NEXT(["Proceed to IC Review"]):::terminal
 
-    style S3 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
-    style S4 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+    style S3 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
+    style S4 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
         </pre>
       </div>
     </div>
@@ -930,13 +524,13 @@ flowchart TD
       </div>
       <div class="diagram-body">
         <pre class="mermaid" id="dia-approval">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
 flowchart TD
-    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
-    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
-    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
-    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
-    classDef rejected fill:#37474f,stroke:#78909c,stroke-width:2px,color:#b0bec5
+    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
+    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
+    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
+    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
+    classDef rejected fill:#EFEBE4,stroke:#8A2F22,stroke-width:2px,color:#8A2F22
 
     IN(["From Investment Memo"]):::terminal
     REJECTED(["DEAL REJECTED"]):::rejected
@@ -961,7 +555,7 @@ flowchart TD
     E5 --> O5[/"Approved Position\n& Audit Trail"/]:::output
     O5 --> NEXT(["Proceed to\nDeployment Pacing"]):::terminal
 
-    style S5 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+    style S5 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
         </pre>
       </div>
     </div>
@@ -982,13 +576,13 @@ flowchart TD
       </div>
       <div class="diagram-body">
         <pre class="mermaid" id="dia-execution">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
 flowchart TD
-    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
-    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
-    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
-    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
-    classDef rejected fill:#37474f,stroke:#78909c,stroke-width:2px,color:#b0bec5
+    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
+    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
+    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
+    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
+    classDef rejected fill:#EFEBE4,stroke:#8A2F22,stroke-width:2px,color:#8A2F22
 
     IN(["From Approved Position"]):::terminal
     REJECTED(["DEAL TERMINATED"]):::rejected
@@ -1020,8 +614,8 @@ flowchart TD
     G5 --> O7[/"Live Portfolio"/]:::output
     O7 --> NEXT(["Proceed to Monitoring"]):::terminal
 
-    style S6 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
-    style S7 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+    style S6 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
+    style S7 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
         </pre>
       </div>
     </div>
@@ -1042,13 +636,13 @@ flowchart TD
       </div>
       <div class="diagram-body">
         <pre class="mermaid" id="dia-monitoring">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1e3a5f', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#4a6fa5', 'lineColor': '#5a7fa5', 'secondaryColor': '#1a2332', 'tertiaryColor': '#2a3a50', 'background': '#151c25', 'mainBkg': '#1e3a5f', 'nodeBorder': '#4a6fa5', 'clusterBkg': '#1a2332', 'clusterBorder': '#2a3a50', 'titleColor': '#e2e8f0', 'edgeLabelBackground': '#1a2332'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
 flowchart TD
-    classDef terminal fill:#455a64,stroke:#78909c,stroke-width:2px,color:#eceff1
-    classDef process fill:#1e3a5f,stroke:#4a6fa5,stroke-width:1.5px,color:#e2e8f0
-    classDef decision fill:#4a3800,stroke:#cc8800,stroke-width:2px,color:#ffe0a0
-    classDef output fill:#1b4332,stroke:#2d6a4f,stroke-width:1.5px,color:#b7e4c7
-    classDef workout fill:#3d1f00,stroke:#b02a37,stroke-width:1.5px,color:#ffcdd2
+    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
+    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
+    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
+    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
+    classDef workout fill:#F6EDD6,stroke:#8A2F22,stroke-width:1.5px,color:#7A5A12
 
     IN(["From Live Portfolio"]):::terminal
 
@@ -1082,7 +676,7 @@ flowchart TD
     H6 -.->|"Strategic:\nStrategy Change\n(Macro Regime Shift)"| LOOP2(["Re-enter Step 3.1"]):::terminal
     H6 -.->|"Fundamental:\nMandate Review\n(LP Redemption /\nFund Restructure)"| LOOP3(["Re-enter Step 1.1"]):::terminal
 
-    style S8 fill:#0d2137,stroke:#1e3a5f,color:#e2e8f0
+    style S8 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
         </pre>
       </div>
     </div>
@@ -1160,19 +754,19 @@ flowchart TD
   <div class="legend-grid">
     <div class="legend-card">
       <h3>Node Types</h3>
-      <div class="legend-item"><div class="legend-swatch" style="background:#1e3a5f;border:1px solid #4a6fa5"></div><span>Process Step</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#4a3800;border:1px solid #cc8800"></div><span>Decision / Branching Point</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#1b4332;border:1px solid #2d6a4f"></div><span>Output Document</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#4a1025;border:1px solid #b02a37"></div><span>Screening Gate (Hard Stop)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#3d1f00;border:1px solid #b02a37"></div><span>Workout / Recovery Process</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#455a64;border:1px solid #78909c"></div><span>Terminal (Start / End)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#37474f;border:1px solid #78909c"></div><span>Rejected (Terminal)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#F4F1EA;border:1px solid #BDB6A8"></div><span>Process Step</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#EBE5F3;border:1px solid #4B3576"></div><span>Decision / Branching Point</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#E2EFE6;border:1px solid #2D5F3D"></div><span>Output Document</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#F6E3DF;border:1px solid #8A2F22"></div><span>Screening Gate (Hard Stop)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#F6EDD6;border:1px solid #8A2F22"></div><span>Workout / Recovery Process</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#13202F;border:1px solid #13202F"></div><span>Terminal (Start / End)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:#EFEBE4;border:1px solid #8A2F22"></div><span>Rejected (Terminal)</span></div>
     </div>
 
     <div class="legend-card">
       <h3>Edge Types</h3>
-      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-top:3px solid #5a7fa5;height:0;margin-top:8px"></div><span>Sequential flow (solid line)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-top:3px dashed #5a7fa5;height:0;margin-top:8px"></div><span>Periodic feedback loop (dotted line)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-top:3px solid #8A95A3;height:0;margin-top:8px"></div><span>Sequential flow (solid line)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-top:3px dashed #8A95A3;height:0;margin-top:8px"></div><span>Periodic feedback loop (dotted line)</span></div>
     </div>
 
     <div class="legend-card">
@@ -1188,7 +782,8 @@ flowchart TD
 
 <!-- FOOTER -->
 <footer>
-  EM Infrastructure Portfolio Process v3 &nbsp;|&nbsp; Generated from <a href="#">em_infra_v3.mermaid</a>
+  <span>EM Infrastructure Portfolio Process v3 &nbsp;|&nbsp; Generated from <a href="#">em_infra_v3.mermaid</a></span>
+  <span>Built at SpaceXAI and shared with permission. A general method with no client data.</span>
 </footer>
 
 <!-- FULLSCREEN OVERLAY -->
@@ -1223,24 +818,24 @@ function loadMermaid(cb) {
   tryNext(0);
 }
 
-loadMermaid(function() {
+loadMermaid(function() { (document.fonts ? document.fonts.ready : Promise.resolve()).then(function() {
   var mermaidConfig = {
     startOnLoad: false,
     theme: 'base',
     themeVariables: {
-      primaryColor: '#1e3a5f',
-      primaryTextColor: '#e2e8f0',
-      primaryBorderColor: '#4a6fa5',
-      lineColor: '#5a7fa5',
-      secondaryColor: '#1a2332',
-      tertiaryColor: '#2a3a50',
-      background: '#151c25',
-      mainBkg: '#1e3a5f',
-      nodeBorder: '#4a6fa5',
-      clusterBkg: '#1a2332',
-      clusterBorder: '#2a3a50',
-      titleColor: '#e2e8f0',
-      edgeLabelBackground: '#1a2332'
+      primaryColor: '#F4F1EA',
+      primaryTextColor: '#13202F',
+      primaryBorderColor: '#BDB6A8',
+      lineColor: '#8A95A3',
+      secondaryColor: '#FAF8F4',
+      tertiaryColor: '#FFFFFF',
+      background: '#FFFFFF',
+      mainBkg: '#F4F1EA',
+      nodeBorder: '#BDB6A8',
+      clusterBkg: '#FAF8F4',
+      clusterBorder: '#E6E1D8',
+      titleColor: '#13202F',
+      edgeLabelBackground: '#FFFFFF'
     },
     flowchart: { htmlLabels: true, curve: 'basis' },
     securityLevel: 'loose'
@@ -1304,7 +899,7 @@ loadMermaid(function() {
       window._diaSources[el.id] = el.textContent.trim();
     }
   });
-});
+}); });
 
 // Store sources immediately before mermaid loads
 window._diaSources = {};
