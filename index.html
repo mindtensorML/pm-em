@@ -1,954 +1,430 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EM Infrastructure Portfolio Process v3</title>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EM Infrastructure Portfolio Process</title>
+<meta name="description" content="How to run an emerging-market infrastructure portfolio from mandate to watchlist, mapped against the IFC Performance Standards (2012) and the Operating Principles for Impact Management (2019).">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
 :root { --bg:#F7F5F0; --paper:#FFFFFF; --ink:#13202F; --muted:#5D6B7A; --faint:#8A95A3; --rule:#E6E1D8; --accent:#1F3A5F; --gold:#A8874F;
-  --serif:"Fraunces", Georgia, serif; --sans:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"JetBrains Mono", ui-monospace, monospace;
-  /* muted phase and status tones (legacy names kept for inline styles) */
-  --accent-2:#5B7FA6; --accent-3:#A8874F; --gate:#7A63A0; --output:#4F8A63; --reject:#B0574A; --workout:#C07A3E; --text-dim:#8A95A3;
-  --track:#EEEAE2;
-  --chip-blue-bg:#E3EBF4; --chip-blue-fg:#1F3A5F; --chip-purple-bg:#EBE5F3; --chip-purple-fg:#4B3576; --chip-green-bg:#E2EFE6; --chip-green-fg:#2D5F3D; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0F151C; --paper:#151D26; --ink:#E8E4DC; --muted:#A3ADB8; --faint:#7D8894; --rule:#26313C; --accent:#9DB8DA; --gold:#C9A86E;
-  --accent-2:#8FA9C9; --accent-3:#C9A86E; --gate:#A994C9; --output:#7FB08F; --reject:#D38A7E; --workout:#D9A070; --text-dim:#7D8894; --track:#1E2833;
-  --chip-blue-bg:#1E2B3B; --chip-blue-fg:#B5C9E3; --chip-purple-bg:#2A2238; --chip-purple-fg:#CDBDE6; --chip-green-bg:#1C2E24; --chip-green-fg:#A9D4B5; } }
-:root[data-theme="dark"] { --bg:#0F151C; --paper:#151D26; --ink:#E8E4DC; --muted:#A3ADB8; --faint:#7D8894; --rule:#26313C; --accent:#9DB8DA; --gold:#C9A86E;
-  --accent-2:#8FA9C9; --accent-3:#C9A86E; --gate:#A994C9; --output:#7FB08F; --reject:#D38A7E; --workout:#D9A070; --text-dim:#7D8894; --track:#1E2833;
-  --chip-blue-bg:#1E2B3B; --chip-blue-fg:#B5C9E3; --chip-purple-bg:#2A2238; --chip-purple-fg:#CDBDE6; --chip-green-bg:#1C2E24; --chip-green-fg:#A9D4B5; }
-
-html { scroll-behavior:smooth; }
-body { background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  --serif:"Fraunces", Georgia, serif; --sans:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif; --mono:"JetBrains Mono", ui-monospace, monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0F151C; --paper:#151D26; --ink:#E8E4DC; --muted:#A3ADB8; --faint:#7D8894; --rule:#26313C; --accent:#9DB8DA; --gold:#C9A86E; } }
+:root[data-theme="dark"] { --bg:#0F151C; --paper:#151D26; --ink:#E8E4DC; --muted:#A3ADB8; --faint:#7D8894; --rule:#26313C; --accent:#9DB8DA; --gold:#C9A86E; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:24px; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
 a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
-
-/* ===== TOP BAR ===== */
-.mt-top { border-bottom:1px solid var(--rule); background:var(--paper); }
-.mt-top .in { max-width:1320px; margin:0 auto; padding:12px 16px; display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:space-between; font:13px/1.5 var(--sans); color:var(--muted); }
-.mt-top b { color:var(--ink); font-weight:600; } .mt-top a { color:var(--accent); text-decoration:none; }
-
-/* ===== HERO ===== */
-.hero { max-width:1320px; margin:0 auto; padding:56px 16px 8px; text-align:left; }
+.top { border-bottom:1px solid var(--rule); background:var(--paper); }
+.top .in { max-width:1320px; margin:0 auto; padding:12px 16px; display:flex; flex-wrap:wrap; gap:6px 18px; justify-content:space-between; font-size:13px; color:var(--muted); }
+.top b { color:var(--ink); font-weight:600; letter-spacing:.2px; }
+.shell { max-width:1320px; margin:0 auto; padding:0 16px; display:grid; grid-template-columns:220px minmax(0,1fr); gap:48px; }
+aside.toc { position:sticky; top:0; align-self:start; max-height:100vh; overflow:auto; padding:40px 0 24px; font-size:13px; }
+aside.toc .lbl { font-size:11px; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); margin:16px 0 6px; }
+aside.toc a { display:flex; gap:10px; padding:4px 10px; margin-left:-10px; border-left:2px solid transparent; color:var(--muted); line-height:1.35; }
+aside.toc a span.n { font-family:var(--mono); font-size:11px; color:var(--faint); min-width:18px; padding-top:1px; }
+aside.toc a.on { color:var(--ink); border-left-color:var(--gold); background:color-mix(in srgb, var(--gold) 8%, transparent); }
+aside.toc a:hover { text-decoration:none; color:var(--ink); }
+main { padding:48px 0 80px; min-width:0; }
 .eyebrow { font-size:12px; letter-spacing:1.6px; text-transform:uppercase; color:var(--gold); font-weight:600; }
-.hero h1 { font-family:var(--serif); font-weight:500; font-size:clamp(34px,5vw,54px); line-height:1.05; letter-spacing:-.6px; color:var(--ink); margin:12px 0 14px; }
-.hero h1 span { color:inherit; }
-.subtitle { font-family:var(--serif); font-weight:400; font-size:clamp(18px,2.2vw,22px); line-height:1.4; color:var(--muted); max-width:760px; margin:0 0 14px; }
-.meta { font-size:13px; color:var(--faint); margin-bottom:18px; }
-.hero-sub { font-size:16px; color:var(--ink); max-width:760px; margin:0; }
-
-/* Stats row */
-.stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin:32px 0 0; }
-.stat-card { padding:18px 16px 16px 0; }
-.stat-num { font-family:var(--serif); font-weight:500; font-size:40px; line-height:1; letter-spacing:-.5px; color:var(--ink); }
-.stat-label { margin-top:8px; font-size:12.5px; color:var(--muted); }
-
-/* ===== OVERVIEW CARDS ===== */
-.overview-section { max-width:1320px; margin:0 auto; padding:32px 16px 48px; }
-.cards-row { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(320px,100%), 1fr)); gap:16px; }
-.ov-card { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:24px; }
-.ov-card h3 { font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); margin-bottom:12px; }
-.ov-card .big-num { font-family:var(--serif); font-size:28px; font-weight:500; color:var(--ink); line-height:1.1; margin-bottom:12px; }
-.step-list { list-style:none; }
-.step-list li { display:flex; align-items:flex-start; gap:10px; padding:5px 0; font-size:14px; color:var(--muted); }
-.step-list .dot { width:8px; height:8px; border-radius:50%; margin-top:8px; flex-shrink:0; }
-
-/* ===== TABS ===== */
-.tabs-section { max-width:1320px; margin:0 auto; padding:0 16px 48px; }
-.tabs-header { display:flex; gap:4px; overflow-x:auto; background:var(--paper); border:1px solid var(--rule); border-radius:12px 12px 0 0; padding:0 8px; margin-bottom:32px; scrollbar-width:none; }
-.tabs-header::-webkit-scrollbar { display:none; }
-.tab-btn { background:transparent; border:none; padding:14px 14px 12px; font-family:var(--sans); font-size:14px; font-weight:500; color:var(--muted); cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; transition:color .2s, border-color .2s; }
-.tab-btn:hover { color:var(--ink); }
-.tab-btn.active { color:var(--ink); border-bottom-color:var(--gold); }
-
-.tab-content { display:none; }
-.tab-content.active { display:block; }
-.tab-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:12px; }
-.tab-meta h2 { font-family:var(--serif); font-weight:500; font-size:30px; letter-spacing:-.3px; line-height:1.15; color:var(--ink); }
-.tab-meta .tag { display:inline-flex; align-items:center; padding:3px 10px; border-radius:999px; font-size:11.5px; font-weight:600; letter-spacing:.2px; white-space:nowrap; }
-.tag-scope { background:var(--chip-green-bg); color:var(--chip-green-fg); }
-.tag-steps { background:var(--chip-blue-bg); color:var(--chip-blue-fg); }
-.tag-gate { background:var(--chip-purple-bg); color:var(--chip-purple-fg); }
-.tab-desc { font-size:15px; color:var(--muted); margin-bottom:22px; max-width:760px; }
-
-/* Diagram container (white in both modes so Mermaid colours read correctly) */
-.diagram-wrap { position:relative; background:#FFFFFF; border:1px solid var(--rule); border-radius:14px; overflow:hidden; }
-.diagram-toolbar { display:flex; justify-content:flex-end; gap:8px; padding:10px 14px; border-bottom:1px solid var(--rule); background:var(--paper); }
-.tool-btn { background:var(--paper); border:1px solid var(--rule); color:var(--muted); font-family:var(--sans); font-size:12.5px; font-weight:500; padding:5px 12px; border-radius:8px; cursor:pointer; transition:border-color .2s, color .2s; }
-.tool-btn:hover { border-color:var(--gold); color:var(--ink); }
-.diagram-body { padding:28px; overflow-x:auto; display:flex; justify-content:center; min-height:300px; background:#FFFFFF; }
-.diagram-body .mermaid { width:100%; background:transparent; display:flex; justify-content:center; }
-
-/* Fullscreen overlay */
-.fullscreen-overlay { display:none; position:fixed; inset:0; z-index:1000; background:#FFFFFF; overflow:auto; padding:20px; }
-.fullscreen-overlay.open { display:flex; align-items:center; justify-content:center; }
-.fullscreen-overlay .close-fs { position:fixed; top:16px; right:16px; background:#FFFFFF; border:1px solid #E6E1D8; color:#13202F; font-size:1.2rem; width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:1001; }
-.fullscreen-overlay .mermaid-fs { padding:40px; }
-
-/* ===== TABLES ===== */
-.tables-section, .legend-section { max-width:1320px; margin:0 auto; padding:24px 16px 48px; }
-.tables-section h2, .legend-section h2 { font-family:var(--serif); font-weight:500; font-size:30px; letter-spacing:-.3px; line-height:1.15; color:var(--ink); margin-bottom:22px; }
-.tables-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(360px,100%), 1fr)); gap:16px; margin-bottom:24px; }
-.tbl-card { background:var(--paper); border:1px solid var(--rule); border-radius:14px; overflow:hidden; }
-.tbl-card h3 { padding:14px 20px; font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); border-bottom:1px solid var(--rule); }
-.tbl-card table { width:100%; border-collapse:collapse; font-size:14px; }
-.tbl-card th, .tbl-card td { padding:10px 20px; text-align:left; border-bottom:1px solid var(--rule); vertical-align:top; }
-.tbl-card th { color:var(--faint); font-weight:600; font-size:11.5px; text-transform:uppercase; letter-spacing:.8px; }
-.tbl-card td { color:var(--muted); }
-.tbl-card tr:last-child td { border-bottom:none; }
-.tbl-card td:first-child { color:var(--ink); font-weight:500; }
-
-/* ===== LEGEND ===== */
-.legend-section { padding-bottom:64px; }
-.legend-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(280px,100%), 1fr)); gap:16px; }
-.legend-card { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:22px 24px; }
-.legend-card h3 { font-size:12px; font-weight:600; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); margin-bottom:14px; }
-.legend-item { display:flex; align-items:center; gap:12px; padding:6px 0; }
-.legend-swatch { width:28px; height:16px; border-radius:4px; flex-shrink:0; }
-.legend-item span { font-size:14px; color:var(--muted); }
-
-/* ===== FOOTER ===== */
-footer { max-width:1320px; margin:0 auto; padding:20px 16px 40px; border-top:1px solid var(--rule); color:var(--faint); font-size:13px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; }
-footer a { color:var(--accent); text-decoration:none; }
-
-/* Toast */
-.toast { position:fixed; bottom:24px; right:24px; background:var(--paper); border:1px solid var(--rule); color:var(--ink); padding:10px 18px; border-radius:10px; font-size:13px; font-weight:500; z-index:2000; opacity:0; transform:translateY(10px); transition:opacity .3s, transform .3s; pointer-events:none; }
-.toast.show { opacity:1; transform:translateY(0); }
-
-/* Responsive */
-@media (max-width: 768px) {
-  .hero { padding:40px 16px 8px; }
-  .stats-row { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .stat-num { font-size:34px; }
-  .diagram-body { padding:16px; }
-  .tab-btn { padding:12px 10px 10px; font-size:13.5px; }
-  .tab-meta h2, .tables-section h2, .legend-section h2 { font-size:26px; }
-}
-
-.diagram-body .mermaid svg { max-width:100%; height:auto; }
-</style>
-</head>
-<body>
-<div class="mt-top"><div class="in"><span><b>mindtensorML</b> · Process maps for AI in investment work</span><span>By Caesar Rana, CFA, APMG CP3P · <a href="https://mindtensorml.github.io/">All maps</a></span></div></div>
-
-<!-- HERO -->
-<header class="hero">
-  <div class="eyebrow">Emerging markets · Infrastructure portfolio</div>
-  <h1>EM Infrastructure <span>Portfolio Process</span></h1>
-  <p class="subtitle">How to run an emerging-market infrastructure portfolio from mandate to watchlist, written as a process an AI agent can follow.</p>
-  <div class="meta">Process framework v3</div>
-  <p class="hero-sub">Build and manage a diversified EM infrastructure / project finance portfolio with allocation, risk budgeting, and performance reporting.</p>
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Steps</div></div>
-    <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Gates</div></div>
-    <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">Outputs</div></div>
-    <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Feedback Loops</div></div>
-    <div class="stat-card"><div class="stat-num">52</div><div class="stat-label">Process Nodes</div></div>
-  </div>
-</header>
-
-<!-- OVERVIEW CARDS -->
-<section class="overview-section">
-  <div class="cards-row">
-    <!-- Card 1: Step Distribution -->
-    <div class="ov-card">
-      <h3>Step Distribution</h3>
-      <div class="big-num">8 Steps</div>
-      <ul class="step-list">
-        <li><span class="dot" style="background:var(--accent)"></span>Governance &amp; Policy (Steps 1-2)</li>
-        <li><span class="dot" style="background:var(--accent-2)"></span>Sourcing &amp; Pipeline (Steps 3-4)</li>
-        <li><span class="dot" style="background:var(--gate)"></span>Approval &amp; Construction (Step 5)</li>
-        <li><span class="dot" style="background:var(--accent-3)"></span>Deployment &amp; Execution (Steps 6-7)</li>
-        <li><span class="dot" style="background:var(--output)"></span>Monitoring &amp; Reporting (Step 8)</li>
-      </ul>
-    </div>
-
-    <!-- Card 2: Gate Architecture -->
-    <div class="ov-card">
-      <h3>Gate Architecture</h3>
-      <div class="big-num">5 Gates</div>
-      <ul class="step-list">
-        <li><span class="dot" style="background:var(--reject)"></span>E&amp;S Screening (IFC Standards)</li>
-        <li><span class="dot" style="background:var(--reject)"></span>Preliminary DD Go/Kill</li>
-        <li><span class="dot" style="background:var(--gate)"></span>IC Approval (3-way)</li>
-        <li><span class="dot" style="background:var(--accent-3)"></span>CP Satisfaction / Terminate</li>
-        <li><span class="dot" style="background:var(--accent)"></span>Watchlist Trigger</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- TABS -->
-<section class="tabs-section">
-  <div class="tabs-header" role="tablist">
-    <button class="tab-btn active" data-tab="master">Master Flow</button>
-    <button class="tab-btn" data-tab="mandate">Steps 1-2</button>
-    <button class="tab-btn" data-tab="sourcing">Steps 3-4</button>
-    <button class="tab-btn" data-tab="approval">Step 5</button>
-    <button class="tab-btn" data-tab="execution">Steps 6-7</button>
-    <button class="tab-btn" data-tab="monitoring">Step 8</button>
-  </div>
-
-  <!-- TAB: MASTER FLOW -->
-  <div class="tab-content active" id="tab-master">
-    <div class="tab-meta">
-      <h2>Master Portfolio Workflow</h2>
-      <span class="tag tag-scope">End-to-End</span>
-    </div>
-    <p class="tab-desc">Complete 8-step process from mandate definition through portfolio monitoring. All gates, feedback loops, and output documents shown.</p>
-    <div class="diagram-wrap">
-      <div class="diagram-toolbar">
-        <button class="tool-btn" onclick="copySrc('master')">Copy Source</button>
-        <button class="tool-btn" onclick="openFs('master')">Fullscreen</button>
-      </div>
-      <div class="diagram-body">
-        <pre class="mermaid" id="dia-master">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
-flowchart TD
-    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
-    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
-    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
-    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
-    classDef gate fill:#F6E3DF,stroke:#8A2F22,stroke-width:2px,color:#5C1F16
-    classDef workout fill:#F6EDD6,stroke:#8A2F22,stroke-width:1.5px,color:#7A5A12
-    classDef rejected fill:#EFEBE4,stroke:#8A2F22,stroke-width:2px,color:#8A2F22
-    START(["START"]):::terminal
-    REJECTED(["DEAL REJECTED"]):::rejected
-    subgraph S8["STEP 8: MONITORING & REPORTING"]
-        H1["8.1 Track KPIs"]:::process
-        H2["8.2 Attribution"]:::process
-        H2a["8.3 Credit Review"]:::process
-        H3["8.4 Impact Reporting"]:::process
-        H4{"8.5 Watchlist?"}:::decision
-        H4W1["8.5a Restructuring"]:::workout
-        H4W2["8.5b Workout"]:::workout
-        H4W3{"8.5c Resolution"}:::decision
-        H5["8.6 Reassess"]:::process
-        H6{"8.7 Action Decision"}:::decision
-        H7["8.8 Reporting"]:::process
-        H1 --> H2 --> H2a --> H3 --> H4
-        H4 -->|"Triggered"| H4W1 --> H4W2 --> H4W3
-        H4W3 -->|"Restructured"| H1
-        H4W3 -->|"Exit / Write-Off"| H5
-        H4 -->|"Not Triggered"| H5
-        H5 --> H6
-        H6 -->|"Hold"| H7
-    end
-    subgraph S7["STEP 7: EXECUTION & CLOSE"]
-        G1["7.1 Negotiation"]:::process
-        G2["7.2 Conditions Precedent"]:::process
-        G3{"7.3 CP Satisfied?"}:::decision
-        G4["7.4 Financial Close"]:::process
-        G5["7.5 Booking & Trustee"]:::process
-        G1 --> G2 --> G3
-        G3 -->|"Yes"| G4
-        G3 -->|"Renegotiate"| G1
-        G3 -->|"Terminate"| REJECTED
-        G4 --> G5
-    end
-    subgraph S6["STEP 6: DEPLOYMENT PACING"]
-        F1["6.1 Commitment Schedule"]:::process
-        F2["6.2 J-Curve Projection"]:::process
-        F3["6.3 Liquidity Buffer"]:::process
-        F4["6.4 Recycling Policy"]:::process
-        F1 --> F2 --> F3 --> F4
-    end
-    subgraph S5["STEP 5: APPROVAL & CONSTRUCTION"]
-        E1["5.1 IC Review"]:::process
-        E2{"5.2 IC Approval"}:::decision
-        E3["5.3 Portfolio Sizing"]:::process
-        E4["5.4 Stress Test"]:::process
-        E5["5.5 Finalize Portfolio"]:::process
-        E1 --> E2
-        E2 -->|"Approved"| E3
-        E2 -->|"Conditional"| D8
-        E3 --> E4 --> E5
-    end
-    subgraph S4["STEP 4: PIPELINE & THESIS"]
-        D1["4.1 Origination"]:::process
-        D2{"4.2 GATE: E&S"}:::gate
-        D2R{"4.3 Remediable?"}:::decision
-        D3["4.4 Research"]:::process
-        D4["4.5 Political Risk"]:::process
-        D5["4.6 Preliminary DD"]:::process
-        D6{"4.7 GATE: DD?"}:::decision
-        D7["4.8 Detailed DD"]:::process
-        D8["4.9 Investment Memo"]:::process
-        D9["4.10 Valuation & Rating"]:::process
-        D1 --> D2
-        D2 -->|"Pass"| D3
-        D2 -->|"Fail"| D2R
-        D2R -->|"Restructure"| D1
-        D3 --> D4 --> D5 --> D6
-        D6 -->|"Proceed"| D7 --> D8 --> D9
-    end
-    subgraph S3["STEP 3: OPPORTUNITY SET"]
-        C1["3.1 Sector Tiers"]:::process
-        C2["3.2 Geography Tiers"]:::process
-        C3["3.3 Instrument Menu"]:::process
-        C4["3.4 Currency & Hedging"]:::process
-        C5["3.5 Sourcing Channels"]:::process
-        C6["3.6 Formalize Universe"]:::process
-        C1 --> C2 --> C3 --> C4 --> C5 --> C6
-    end
-    subgraph S2["STEP 2: INVESTMENT POLICY"]
-        B1["2.1 Return Objective"]:::process
-        B2["2.2 Risk Parameters"]:::process
-        B2a["2.3 ESG & Impact Framework"]:::process
-        B3["2.4 Time Horizon"]:::process
-        B4["2.5 Constraints"]:::process
-        B5["2.6 Select Benchmark"]:::process
-        B6["2.7 Formalize Policy"]:::process
-        B1 --> B2 --> B2a --> B3 --> B4 --> B5 --> B6
-    end
-    subgraph S1["STEP 1: MANDATE & GOVERNANCE"]
-        A1["1.1 Identify Principal"]:::process
-        A2["1.2 Define Beneficiaries"]:::process
-        A3["1.3 Set Capital Objectives"]:::process
-        A4["1.4 Establish Governance"]:::process
-        A5["1.5 Portfolio Architecture"]:::process
-        A6["1.6 Formalize Mandate"]:::process
-        A1 --> A2 --> A3
-        A1 --> A4
-        A2 --> A4
-        A3 --> A5
-        A4 --> A5
-        A5 --> A6
-    end
-
-
-    START --> A1
-
-
-    A6 --> O1[/"Mandate Statement"/]:::output
-    O1 --> B1
-
-
-    B6 --> O2[/"Investment Policy"/]:::output
-    O2 --> C1
-
-
-    C6 --> O3[/"Eligible Universe"/]:::output
-    O3 --> D1
-
-
-    D2R -->|"No"| REJECTED
-    D6 -->|"Kill"| REJECTED
-
-    D9 --> O4[/"Memo & Assessment"/]:::output
-    O4 --> E1
-
-
-    E2 -->|"Rejected"| REJECTED
-
-    E5 --> O5[/"Approved Position"/]:::output
-    O5 --> F1
-
-
-    F4 --> O6[/"Pacing Plan"/]:::output
-    O6 --> G1
-
-
-    G5 --> O7[/"Live Portfolio"/]:::output
-    O7 --> H1
-
-
-    H6 -->|"Rebalance"| H7
-    H7 --> O8[/"Performance Report"/]:::output
-    O8 --> END(["END / NEXT CYCLE"]):::terminal
-    H6 -.->|"Tactical"| E3
-    H6 -.->|"Strategic"| C1
-    H6 -.->|"Fundamental"| A1
-        </pre>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: STEPS 1-2 -->
-  <div class="tab-content" id="tab-mandate">
-    <div class="tab-meta">
-      <h2>Mandate &amp; Investment Policy</h2>
-      <span class="tag tag-steps">Steps 1-2</span>
-    </div>
-    <p class="tab-desc">Foundation layer. Define the principal, governance structure, capital objectives, ESG framework, and formalize both the mandate statement and investment policy.</p>
-    <div class="diagram-wrap">
-      <div class="diagram-toolbar">
-        <button class="tool-btn" onclick="copySrc('mandate')">Copy Source</button>
-        <button class="tool-btn" onclick="openFs('mandate')">Fullscreen</button>
-      </div>
-      <div class="diagram-body">
-        <pre class="mermaid" id="dia-mandate">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
-flowchart TD
-    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
-    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
-    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
-
-    START(["Foundation"]):::terminal
-
-    subgraph S1["STEP 1: MANDATE & GOVERNANCE"]
-        A1["1.1 Identify Principal\n(DFI, Fund Sponsor,\nBlended Finance Vehicle)"]:::process
-        A2["1.2 Define Beneficiaries\n& Development Mandate"]:::process
-        A3["1.3 Set Capital Objectives\n(Return Target, Impact Overlay,\nCapital Preservation Priority)"]:::process
-        A4["1.4 Establish Governance\n(IC Composition, Delegation\nMatrix, Approval Thresholds)"]:::process
-        A5["1.5 Define Portfolio\nArchitecture"]:::process
-        A6["1.6 Formalize Mandate"]:::process
-        A1 --> A2
-        A2 --> A3
-        A1 --> A4
-        A2 --> A4
-        A3 --> A5
-        A4 --> A5
-        A5 --> A6
-    end
-
-    subgraph S2["STEP 2: INVESTMENT POLICY"]
-        B1["2.1 Return / Performance\nObjective\n(SOFR + Spread, Real Return Floor)"]:::process
-        B2["2.2 Risk Parameters\n(Credit Loss Tolerance,\nConcentration Limits, FX Ceiling)"]:::process
-        B2a["2.3 ESG & Impact Framework\n(E&S Standards, Exclusion List,\nImpact KPIs, Additionality Criteria)"]:::process
-        B3["2.4 Time Horizon\n(Fund Life, Deployment\nPeriod, Exit Window)"]:::process
-        B4["2.5 Constraints &\nStructural Advantages\n(Regulatory, DFI Co-lending,\nPreferred Creditor Status)"]:::process
-        B5["2.6 Select Benchmark\n(Absolute Return\nor Reference Index)"]:::process
-        B6["2.7 Formalize Policy"]:::process
-        B1 --> B2
-        B2 --> B2a
-        B2a --> B3
-        B3 --> B4
-        B4 --> B5
-        B5 --> B6
-    end
-
-    START --> A1
-    A6 --> O1[/"Mandate Statement"/]:::output
-    O1 --> B1
-    B6 --> O2[/"Investment Policy Framework"/]:::output
-    O2 --> NEXT(["Proceed to Step 3"]):::terminal
-
-    style S1 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
-    style S2 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
-        </pre>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: STEPS 3-4 -->
-  <div class="tab-content" id="tab-sourcing">
-    <div class="tab-meta">
-      <h2>Sourcing &amp; Deal Pipeline</h2>
-      <span class="tag tag-steps">Steps 3-4</span>
-      <span class="tag tag-gate">2 Gates</span>
-    </div>
-    <p class="tab-desc">Define the eligible universe, then run each deal through E&amp;S screening, research aggregation, political risk assessment, due diligence, and valuation with internal risk rating.</p>
-    <div class="diagram-wrap">
-      <div class="diagram-toolbar">
-        <button class="tool-btn" onclick="copySrc('sourcing')">Copy Source</button>
-        <button class="tool-btn" onclick="openFs('sourcing')">Fullscreen</button>
-      </div>
-      <div class="diagram-body">
-        <pre class="mermaid" id="dia-sourcing">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
-flowchart TD
-    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
-    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
-    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
-    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
-    classDef gate fill:#F6E3DF,stroke:#8A2F22,stroke-width:2px,color:#5C1F16
-    classDef rejected fill:#EFEBE4,stroke:#8A2F22,stroke-width:2px,color:#8A2F22
-
-    IN(["From Investment Policy"]):::terminal
-    REJECTED(["DEAL REJECTED"]):::rejected
-
-    subgraph S3["STEP 3: OPPORTUNITY SET & SOURCING"]
-        C1["3.1 Sector Allocation Tiers\n(Power, Transport, Digital,\nWater/Sanitation, Social)"]:::process
-        C2["3.2 Geography Tiers\n(Core EM, Frontier,\nFragile States)"]:::process
-        C3["3.3 Instrument Menu\n(Senior Secured, Mezzanine,\nEquity, Guarantees)"]:::process
-        C4["3.4 Currency Exposure\n& Hedging Policy"]:::process
-        C5["3.5 Sourcing Channels\n(DFI Pipeline, Sponsor\nRelationships, Gov PPP Pipeline)"]:::process
-        C6["3.6 Formalize Universe"]:::process
-        C1 --> C2 --> C3 --> C4 --> C5 --> C6
-    end
-
-    subgraph S4["STEP 4: DEAL PIPELINE & THESIS DEVELOPMENT"]
-        D1["4.1 Origination &\nInitial Screening"]:::process
-        D2{"4.2 GATE: E&S\nScreening\n(IFC Performance\nStandards)"}:::gate
-        D2R{"4.3 E&S Issues\nRemediable?"}:::decision
-        D3["4.4 Research Aggregation\n(CIMs, Site Visits, Technical\nReports, Legal/Regulatory)"]:::process
-        D4["4.5 Political & Sovereign\nRisk Assessment"]:::process
-        D5["4.6 Preliminary\nDue Diligence\n(Commercial, Technical,\nLegal/Permitting)"]:::process
-        D6{"4.7 GATE: Proceed to\nDetailed DD?"}:::decision
-        D7["4.8 Detailed Due Diligence\n& Financial Modeling\n(Construction Risk, Offtake,\nFX Structure)"]:::process
-        D8["4.9 Investment Memo\n& Scenario Analysis\n(Bull/Bear/Base Case,\nKill Criteria)"]:::process
-        D9["4.10 Valuation, Pricing &\nInternal Risk Rating\n(Credit Spread, PD/LGD,\nRisk Grade, Impact Score)"]:::process
-        D1 --> D2
-        D2 -->|"Pass"| D3
-        D2 -->|"Fail"| D2R
-        D2R -->|"Yes:\nRestructure\n& Resubmit"| D1
-        D3 --> D4
-        D4 --> D5
-        D5 --> D6
-        D6 -->|"Proceed"| D7
-        D7 --> D8
-        D8 --> D9
-    end
-
-    D2R -->|"No"| REJECTED
-    D6 -->|"Kill"| REJECTED
-
-    IN --> C1
-    C6 --> O3[/"Eligible Universe"/]:::output
-    O3 --> D1
-    D9 --> O4[/"Investment Memo\n& Risk Assessment"/]:::output
-    O4 --> NEXT(["Proceed to IC Review"]):::terminal
-
-    style S3 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
-    style S4 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
-        </pre>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: STEP 5 -->
-  <div class="tab-content" id="tab-approval">
-    <div class="tab-meta">
-      <h2>Decision, Approval &amp; Portfolio Construction</h2>
-      <span class="tag tag-steps">Step 5</span>
-      <span class="tag tag-gate">IC Gate</span>
-    </div>
-    <p class="tab-desc">Three-way IC decision (Approve / Conditional / Reject). Approved deals go through portfolio sizing, concentration checks, and stress testing before finalization.</p>
-    <div class="diagram-wrap">
-      <div class="diagram-toolbar">
-        <button class="tool-btn" onclick="copySrc('approval')">Copy Source</button>
-        <button class="tool-btn" onclick="openFs('approval')">Fullscreen</button>
-      </div>
-      <div class="diagram-body">
-        <pre class="mermaid" id="dia-approval">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
-flowchart TD
-    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
-    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
-    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
-    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
-    classDef rejected fill:#EFEBE4,stroke:#8A2F22,stroke-width:2px,color:#8A2F22
-
-    IN(["From Investment Memo"]):::terminal
-    REJECTED(["DEAL REJECTED"]):::rejected
-
-    subgraph S5["STEP 5: DECISION, APPROVAL & PORTFOLIO CONSTRUCTION"]
-        E1["5.1 IC Review\n& Compliance Clearance"]:::process
-        E2{"5.2 IC\nApproval"}:::decision
-        E3["5.3 Portfolio Sizing\n& Concentration Check\n(Name, Country, Sector,\nSponsor, Currency Limits)"]:::process
-        E4["5.4 Stress Test\n(FX Shock, Political Event,\nConstruction Delay,\nRefinancing Risk)"]:::process
-        E5["5.5 Finalize\nTarget Portfolio"]:::process
-        E1 --> E2
-        E2 -->|"Approved"| E3
-        E2 -->|"Conditional:\nRevise &\nResubmit"| REVISE
-        E3 --> E4
-        E4 --> E5
-    end
-
-    REVISE(["Return to\nInvestment Memo"]):::terminal
-    E2 -->|"Rejected"| REJECTED
-
-    IN --> E1
-    E5 --> O5[/"Approved Position\n& Audit Trail"/]:::output
-    O5 --> NEXT(["Proceed to\nDeployment Pacing"]):::terminal
-
-    style S5 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
-        </pre>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: STEPS 6-7 -->
-  <div class="tab-content" id="tab-execution">
-    <div class="tab-meta">
-      <h2>Deployment &amp; Execution</h2>
-      <span class="tag tag-steps">Steps 6-7</span>
-      <span class="tag tag-gate">CP Gate</span>
-    </div>
-    <p class="tab-desc">Capital deployment pacing (commitment scheduling, J-curve projection, liquidity buffers) followed by execution through negotiation, CP satisfaction, financial close, and booking.</p>
-    <div class="diagram-wrap">
-      <div class="diagram-toolbar">
-        <button class="tool-btn" onclick="copySrc('execution')">Copy Source</button>
-        <button class="tool-btn" onclick="openFs('execution')">Fullscreen</button>
-      </div>
-      <div class="diagram-body">
-        <pre class="mermaid" id="dia-execution">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
-flowchart TD
-    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
-    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
-    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
-    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
-    classDef rejected fill:#EFEBE4,stroke:#8A2F22,stroke-width:2px,color:#8A2F22
-
-    IN(["From Approved Position"]):::terminal
-    REJECTED(["DEAL TERMINATED"]):::rejected
-
-    subgraph S6["STEP 6: CAPITAL DEPLOYMENT PACING"]
-        F1["6.1 Commitment Schedule\nby Vintage Year"]:::process
-        F2["6.2 J-Curve Projection\n(Net Cash Flow Profile)"]:::process
-        F3["6.3 Liquidity Buffer\nSizing"]:::process
-        F4["6.4 Recycling Policy\n(Reinvest Repayments\nvs Return Capital)"]:::process
-        F1 --> F2 --> F3 --> F4
-    end
-
-    subgraph S7["STEP 7: EXECUTION & FINANCIAL CLOSE"]
-        G1["7.1 Negotiation &\nDocumentation\n(Term Sheet, Loan Agreement,\nSecurity Package)"]:::process
-        G2["7.2 Conditions Precedent\n& Regulatory Approvals"]:::process
-        G3{"7.3 CP\nSatisfied?"}:::decision
-        G4["7.4 Financial Close\n& First Disbursement\n(May Be Staged to\nConstruction Milestones)"]:::process
-        G5["7.5 Booking, Custodian\n& Trustee Setup"]:::process
-        G1 --> G2 --> G3
-        G3 -->|"Yes"| G4
-        G3 -->|"No:\nRenegotiate"| G1
-        G3 -->|"Terminate:\nCPs Unresolvable"| REJECTED
-        G4 --> G5
-    end
-
-    IN --> F1
-    F4 --> O6[/"Pacing Plan"/]:::output
-    O6 --> G1
-    G5 --> O7[/"Live Portfolio"/]:::output
-    O7 --> NEXT(["Proceed to Monitoring"]):::terminal
-
-    style S6 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
-    style S7 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
-        </pre>
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB: STEP 8 -->
-  <div class="tab-content" id="tab-monitoring">
-    <div class="tab-meta">
-      <h2>Monitoring, Reporting &amp; Rebalancing</h2>
-      <span class="tag tag-steps">Step 8</span>
-      <span class="tag tag-gate">Watchlist Gate</span>
-    </div>
-    <p class="tab-desc">Continuous monitoring loop with KPI tracking, portfolio credit review, impact reporting, watchlist/workout paths, and a consolidated action decision node with three feedback tiers.</p>
-    <div class="diagram-wrap">
-      <div class="diagram-toolbar">
-        <button class="tool-btn" onclick="copySrc('monitoring')">Copy Source</button>
-        <button class="tool-btn" onclick="openFs('monitoring')">Fullscreen</button>
-      </div>
-      <div class="diagram-body">
-        <pre class="mermaid" id="dia-monitoring">
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#F4F1EA', 'primaryTextColor': '#13202F', 'primaryBorderColor': '#BDB6A8', 'lineColor': '#8A95A3', 'secondaryColor': '#FAF8F4', 'tertiaryColor': '#FFFFFF', 'background': '#FFFFFF', 'mainBkg': '#F4F1EA', 'nodeBorder': '#BDB6A8', 'clusterBkg': '#FAF8F4', 'clusterBorder': '#E6E1D8', 'titleColor': '#13202F', 'edgeLabelBackground': '#FFFFFF'}}}%%
-flowchart TD
-    classDef terminal fill:#13202F,stroke:#13202F,stroke-width:2px,color:#F7F5F0
-    classDef process fill:#F4F1EA,stroke:#BDB6A8,stroke-width:1.5px,color:#13202F
-    classDef decision fill:#EBE5F3,stroke:#4B3576,stroke-width:2px,color:#33244F
-    classDef output fill:#E2EFE6,stroke:#2D5F3D,stroke-width:1.5px,color:#1E3A28
-    classDef workout fill:#F6EDD6,stroke:#8A2F22,stroke-width:1.5px,color:#7A5A12
-
-    IN(["From Live Portfolio"]):::terminal
-
-    subgraph S8["STEP 8: MONITORING, REPORTING & REBALANCING"]
-        H1["8.1 Track KPIs vs Thesis\n(Covenants, Construction\nProgress, Offtake Volumes)"]:::process
-        H2["8.2 Performance Attribution\n(Spread, FX Impact,\nCredit Migration)"]:::process
-        H2a["8.3 Portfolio Credit Review\n(Rating Migration, Expected Loss\nRecalculation, Provisioning)"]:::process
-        H3["8.4 Development Impact\nReporting\n(Jobs, CO2, Access Metrics)"]:::process
-        H4{"8.5 Watchlist\nTrigger?"}:::decision
-        H4W1["8.5a Restructuring\nAssessment"]:::workout
-        H4W2["8.5b Workout /\nRecovery Process"]:::workout
-        H4W3{"8.5c\nResolution"}:::decision
-        H5["8.6 Reassess Conditions\n& Portfolio Views"]:::process
-        H6{"8.7 Portfolio\nAction Decision"}:::decision
-        H7["8.8 Stakeholder Reporting\n(LP/Board Reports,\nRegulatory Filings)"]:::process
-        H1 --> H2 --> H2a --> H3 --> H4
-        H4 -->|"Triggered"| H4W1 --> H4W2 --> H4W3
-        H4W3 -->|"Restructured"| H1
-        H4W3 -->|"Exit /\nWrite-Off"| H5
-        H4 -->|"Not Triggered"| H5
-        H5 --> H6
-        H6 -->|"Hold:\nNo Change"| H7
-        H6 -->|"Routine:\nRebalance"| H7
-    end
-
-    IN --> H1
-    H7 --> O8[/"Performance Report"/]:::output
-    O8 --> END(["END / NEXT CYCLE"]):::terminal
-
-    H6 -.->|"Tactical:\nRebalance\n(Drift > Threshold)"| LOOP1(["Re-enter Step 5.3"]):::terminal
-    H6 -.->|"Strategic:\nStrategy Change\n(Macro Regime Shift)"| LOOP2(["Re-enter Step 3.1"]):::terminal
-    H6 -.->|"Fundamental:\nMandate Review\n(LP Redemption /\nFund Restructure)"| LOOP3(["Re-enter Step 1.1"]):::terminal
-
-    style S8 fill:#FAF8F4,stroke:#E6E1D8,color:#13202F
-        </pre>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TABLES -->
-<section class="tables-section">
-  <h2>Reference Tables</h2>
-  <div class="tables-grid">
-    <div class="tbl-card">
-      <h3>Deliverables by Step</h3>
-      <table>
-        <thead><tr><th>Step</th><th>Output Document</th></tr></thead>
-        <tbody>
-          <tr><td>Step 1</td><td>Mandate Statement</td></tr>
-          <tr><td>Step 2</td><td>Investment Policy Framework</td></tr>
-          <tr><td>Step 3</td><td>Eligible Universe</td></tr>
-          <tr><td>Step 4</td><td>Investment Memo &amp; Risk Assessment</td></tr>
-          <tr><td>Step 5</td><td>Approved Position &amp; Audit Trail</td></tr>
-          <tr><td>Step 6</td><td>Pacing Plan</td></tr>
-          <tr><td>Step 7</td><td>Live Portfolio</td></tr>
-          <tr><td>Step 8</td><td>Performance Report</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="tbl-card">
-      <h3>Gate Decisions</h3>
-      <table>
-        <thead><tr><th>Gate</th><th>Outcomes</th></tr></thead>
-        <tbody>
-          <tr><td>4.2 E&amp;S Screening</td><td>Pass / Fail (Remediable?) / Reject</td></tr>
-          <tr><td>4.7 Preliminary DD</td><td>Proceed / Kill</td></tr>
-          <tr><td>5.2 IC Approval</td><td>Approved / Conditional / Rejected</td></tr>
-          <tr><td>7.3 CP Satisfaction</td><td>Yes / Renegotiate / Terminate</td></tr>
-          <tr><td>8.5 Watchlist</td><td>Triggered / Not Triggered</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="tbl-card">
-      <h3>Feedback Loops</h3>
-      <table>
-        <thead><tr><th>Tier</th><th>Trigger</th><th>Re-entry</th></tr></thead>
-        <tbody>
-          <tr><td>Tactical</td><td>Portfolio drift exceeds threshold</td><td>Step 5.3 (Sizing)</td></tr>
-          <tr><td>Strategic</td><td>Macro regime shift</td><td>Step 3.1 (Sectors)</td></tr>
-          <tr><td>Fundamental</td><td>LP redemption / fund restructure</td><td>Step 1.1 (Principal)</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="tbl-card">
-      <h3>Portfolio Scope Parameters</h3>
-      <table>
-        <thead><tr><th>Parameter</th><th>Specification</th></tr></thead>
-        <tbody>
-          <tr><td>Asset Class</td><td>EM Infrastructure / Project Finance</td></tr>
-          <tr><td>Sectors</td><td>Power, Transport, Digital, Water, Social</td></tr>
-          <tr><td>Geographies</td><td>Core EM, Frontier, Fragile States</td></tr>
-          <tr><td>Instruments</td><td>Senior Secured, Mezzanine, Equity, Guarantees</td></tr>
-          <tr><td>Risk Framework</td><td>PD/LGD, Internal Risk Grades, IFC PS</td></tr>
-          <tr><td>ESG Standard</td><td>IFC Performance Standards</td></tr>
-          <tr><td>Impact Metrics</td><td>Jobs, CO2, Access (SDG-aligned)</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- LEGEND -->
-<section class="legend-section">
-  <h2>Color Legend</h2>
-  <div class="legend-grid">
-    <div class="legend-card">
-      <h3>Node Types</h3>
-      <div class="legend-item"><div class="legend-swatch" style="background:#F4F1EA;border:1px solid #BDB6A8"></div><span>Process Step</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#EBE5F3;border:1px solid #4B3576"></div><span>Decision / Branching Point</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#E2EFE6;border:1px solid #2D5F3D"></div><span>Output Document</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#F6E3DF;border:1px solid #8A2F22"></div><span>Screening Gate (Hard Stop)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#F6EDD6;border:1px solid #8A2F22"></div><span>Workout / Recovery Process</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#13202F;border:1px solid #13202F"></div><span>Terminal (Start / End)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:#EFEBE4;border:1px solid #8A2F22"></div><span>Rejected (Terminal)</span></div>
-    </div>
-
-    <div class="legend-card">
-      <h3>Edge Types</h3>
-      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-top:3px solid #8A95A3;height:0;margin-top:8px"></div><span>Sequential flow (solid line)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-top:3px dashed #8A95A3;height:0;margin-top:8px"></div><span>Periodic feedback loop (dotted line)</span></div>
-    </div>
-
-    <div class="legend-card">
-      <h3>Process Phases</h3>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent)"></div><span>Governance &amp; Policy (Steps 1-2)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent-2)"></div><span>Sourcing &amp; Pipeline (Steps 3-4)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--gate)"></div><span>Approval &amp; Construction (Step 5)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent-3)"></div><span>Deployment &amp; Execution (Steps 6-7)</span></div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--output)"></div><span>Monitoring &amp; Reporting (Step 8)</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <span>EM Infrastructure Portfolio Process v3 &nbsp;|&nbsp; Generated from <a href="#">em_infra_v3.mermaid</a></span>
-  <span>Built at SpaceXAI and shared with permission. A general method with no client data.</span>
-</footer>
-
-<!-- FULLSCREEN OVERLAY -->
-<div class="fullscreen-overlay" id="fs-overlay">
-  <button class="close-fs" onclick="closeFs()">&times;</button>
-  <div class="mermaid-fs" id="fs-content"></div>
+h1 { font-family:var(--serif); font-weight:500; font-size:clamp(34px,5vw,54px); line-height:1.05; letter-spacing:-.6px; margin:12px 0 14px; }
+.subtitle { font-family:var(--serif); font-size:clamp(18px,2.2vw,22px); line-height:1.4; color:var(--muted); max-width:760px; margin:0 0 18px; font-weight:400; }
+.meta { font-size:13px; color:var(--faint); display:flex; flex-wrap:wrap; gap:4px 16px; margin-bottom:28px; }
+.lede { max-width:760px; font-size:16px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); margin:32px 0; }
+.stat { padding:18px 16px 16px 0; }
+.stat b { display:block; font-family:var(--serif); font-weight:500; font-size:40px; line-height:1; letter-spacing:-.5px; }
+.stat span { display:block; margin-top:8px; font-size:12.5px; color:var(--muted); }
+.panel { background:var(--paper); border:1px solid var(--rule); border-radius:14px; padding:24px; display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:28px; }
+.panel h3 { font-family:var(--serif); font-weight:500; font-size:22px; margin:0 0 8px; }
+.panel p { margin:0; color:var(--muted); }
+.legend { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.legend li { display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center; font-size:13.5px; color:var(--muted); }
+.legend li b { font-family:var(--serif); font-size:20px; font-weight:500; color:var(--ink); }
+.chip { display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:600; letter-spacing:.2px; padding:3px 9px; border-radius:999px; white-space:nowrap; border:1px solid transparent; }
+.chip i { width:7px; height:7px; border-radius:50%; display:inline-block; }
+section.block { margin-top:72px; }
+h2.sec { font-family:var(--serif); font-weight:500; font-size:30px; letter-spacing:-.3px; margin:6px 0 10px; line-height:1.15; }
+.secnote { color:var(--muted); max-width:760px; margin:0 0 22px; }
+.cycle { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:0; border-top:2px solid var(--rule); }
+.cycle .st { padding:16px 14px 6px 0; position:relative; }
+.cycle .st::before { content:""; position:absolute; top:-7px; left:0; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--faint); }
+.cycle .st.here::before { background:var(--gold); border-color:var(--gold); }
+.cycle .st.here { }
+.cycle .k { font-family:var(--mono); font-size:11px; color:var(--faint); }
+.cycle .t { font-family:var(--serif); font-size:16.5px; line-height:1.25; margin:4px 0 6px; }
+.cycle .m { font-size:12.5px; color:var(--muted); }
+.cycle .st.here .t { color:var(--accent); }
+.cycle .tag { display:inline-block; font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:var(--gold); font-weight:600; margin-top:6px; }
+.rail { display:grid; gap:14px; }
+.grp { display:grid; grid-template-columns:180px minmax(0,1fr); gap:18px; align-items:start; padding:14px 0; border-top:1px solid var(--rule); }
+.grp .gh { font-size:12px; letter-spacing:1.2px; text-transform:uppercase; color:var(--faint); font-weight:600; padding-top:10px; }
+.cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; }
+a.card { display:block; background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:12px 14px; color:var(--ink); transition:border-color .15s, transform .15s; }
+a.card:hover { border-color:var(--gold); text-decoration:none; transform:translateY(-1px); }
+a.card .k { font-family:var(--mono); font-size:11px; color:var(--gold); }
+a.card .t { font-family:var(--serif); font-size:16px; line-height:1.25; margin:3px 0 6px; }
+a.card .c { font-size:12px; color:var(--faint); }
+a.card.sub { background:transparent; border-style:dashed; }
+section.phase { margin-top:84px; }
+.ph-head { display:flex; gap:18px; align-items:flex-start; }
+.badge { flex:none; width:52px; height:52px; border-radius:50%; border:1px solid var(--gold); color:var(--gold); display:grid; place-items:center; font-family:var(--serif); font-size:22px; }
+.badge.sub { border-style:dashed; font-size:14px; font-family:var(--sans); font-weight:600; }
+.ph-head .kick { font-size:12px; letter-spacing:1.4px; text-transform:uppercase; color:var(--faint); font-weight:600; }
+.ph-head h2 { font-family:var(--serif); font-weight:500; font-size:clamp(24px,3vw,32px); line-height:1.12; letter-spacing:-.3px; margin:2px 0 0; }
+.authority { margin:20px 0 6px; padding:14px 18px; border-left:3px solid var(--gold); background:var(--paper); border-radius:0 10px 10px 0; font-size:14.5px; }
+.authority .l { font-size:11px; letter-spacing:1.3px; text-transform:uppercase; color:var(--gold); font-weight:600; display:block; margin-bottom:2px; }
+.anchors { font-size:12.5px; color:var(--faint); margin:8px 0 22px; }
+.anchors b { color:var(--muted); font-weight:600; }
+.ph-body { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; align-items:start; }
+figure.diagram { margin:0; background:#FFFFFF; border:1px solid var(--rule); border-radius:14px; padding:18px 10px; position:sticky; top:16px; max-height:calc(100vh - 32px); overflow:auto; }
+figure.diagram .mermaid { display:flex; justify-content:center; }
+figure.diagram svg { max-width:100%; height:auto; }
+ol.tasks { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+ol.tasks li { background:var(--paper); border:1px solid var(--rule); border-radius:12px; padding:14px 16px; }
+ol.tasks .row { display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin-bottom:6px; }
+ol.tasks .id { font-family:var(--mono); font-size:12px; color:var(--muted); }
+ol.tasks .own { font-size:12px; color:var(--muted); margin-left:auto; }
+ol.tasks .own::before { content:"Owner  "; color:var(--faint); }
+ol.tasks h4 { margin:0 0 4px; font-size:15px; font-weight:600; line-height:1.35; }
+ol.tasks p { margin:0; font-size:14px; color:var(--muted); }
+ol.tasks .ref { margin-top:8px; font-size:12px; color:var(--faint); }
+ol.tasks .ref.bp { color:var(--gold); }
+ol.qs { counter-reset:q; } ol.qs li { counter-increment:q; } ol.qs h4::before { content:counter(q) ". "; color:var(--gold); font-family:var(--serif); }
+footer { margin-top:96px; padding-top:20px; border-top:1px solid var(--rule); color:var(--faint); font-size:13px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; }
+@media (max-width:1100px) { .ph-body { grid-template-columns:1fr; } figure.diagram { position:static; max-height:none; } }
+@media (max-width:900px) { .shell { grid-template-columns:1fr; gap:0; } aside.toc { display:none; } .panel { grid-template-columns:1fr; } .cycle { grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:18px; } .grp { grid-template-columns:1fr; gap:8px; } }
+@media print { aside.toc, .top { display:none; } .shell { display:block; } figure.diagram { position:static; max-height:none; } section.phase { break-before:page; } }
+
+.cycle.c5 { grid-template-columns:repeat(5,minmax(0,1fr)); }
+.cycle.c5 .st::before { background:var(--gold); border-color:var(--gold); }
+.ph-out { font-size:13px; color:var(--muted); margin:-12px 0 22px; }
+.ph-out b { color:var(--ink); font-weight:600; }
+@media (max-width:900px) { .cycle.c5 { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+</style></head><body>
+<div class="top"><div class="in"><span><b>mindtensorML</b> · Process maps for AI in investment work</span><span>By Caesar Rana, CFA, APMG CP3P · <a href="https://mindtensorml.github.io/">All maps</a></span></div></div>
+<div class="shell">
+<aside class="toc" aria-label="Contents"><div class="lbl">Overview</div><a href="#top"><span class="n">·</span>Introduction</a><a href="#cycle"><span class="n">·</span>Impact principles</a><a href="#map"><span class="n">·</span>The map at a glance</a><div class="lbl">Steps</div><a href="#S1"><span class="n">01</span>Mandate and Governance</a><a href="#S2"><span class="n">02</span>Investment Policy</a><a href="#S3"><span class="n">03</span>Opportunity Set and Sourcing</a><a href="#S4"><span class="n">04</span>Deal Pipeline and Thesis</a><a href="#S5"><span class="n">05</span>Decision, Approval and Portfolio Construction</a><a href="#S6"><span class="n">06</span>Capital Deployment Pacing</a><a href="#S7"><span class="n">07</span>Execution and Financial Close</a><a href="#S8"><span class="n">08</span>Monitoring, Reporting and Restructuring</a><div class="lbl">Review</div><a href="#questions"><span class="n">·</span>Open questions</a></aside>
+<main>
+<div id="top" class="eyebrow">Emerging markets · Infrastructure portfolio · v2, October 2026</div>
+<h1>EM Infrastructure Portfolio Process</h1>
+<p class="subtitle">How to run an emerging-market infrastructure portfolio from mandate and policy through sourcing, approval and close, to monitoring, watchlist and exit.</p>
+<div class="meta"><span>v2, October 2026</span><span>Mapped against the IFC Performance Standards (2012) and the Operating Principles for Impact Management (2019)</span><span>A general method with no client data</span></div>
+<p class="lede">The map is written for a portfolio team at a development finance institution, an infrastructure debt fund or a blended finance vehicle. It runs in 8 steps from the mandate to the watchlist and back. Each task cites the public standard that speaks to it. 35 of 71 tasks and gates rest on practitioner practice because no standard covers them, and they are marked as such. The first version of this map was turned into a skills file that a frontier model followed through most of the process. This revision keeps the same 8 steps in the same order.</p>
+<div class="stats">
+ <div class="stat"><b>8</b><span>Steps</span></div>
+ <div class="stat"><b>60</b><span>Tasks</span></div>
+ <div class="stat"><b>11</b><span>Decision gates</span></div>
+ <div class="stat"><b>8</b><span>Outputs</span></div>
+ <div class="stat"><b>6</b><span>Return paths to an earlier step</span></div>
 </div>
+<div class="panel"><div><h3>Who decides</h3><p>Every task and gate has a named owner role, 25 roles in all. Credit approval, restructuring and write-offs stay with named committees. Negotiations, commitments and judgments on counterparties stay with people. Where a model drafts, the owner reviews and signs. The tags are design estimates of what a frontier model could do with the owner accountable. They are not measured results.</p></div>
+<ul class="legend"><li><span class="chip" style="background:#F6E3DF;color:#8A2F22"><i style="background:#8A2F22"></i>Human-only</span><span>Commitments, negotiations, sign-offs and judgments on people</span><b>5</b></li><li><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span>A model drafts, the owner reviews and signs</span><b>47</b></li><li><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span>A model runs it, the owner is accountable and samples the output</span><b>8</b></li><li><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span>A decision with a named owner or committee</span><b>11</b></li></ul></div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">Copied to clipboard</div>
+<section class="block" id="cycle"><div class="eyebrow">Context</div><h2 class="sec">Where the map meets the Operating Principles for Impact Management</h2>
+<p class="secnote">The Impact Principles describe an impact management system in five elements and nine principles. Each element below shows the steps of this map that carry it. E&amp;S rules come from the IFC Performance Standards, which the Principles themselves name as good practice.</p>
+<div class="cycle c5"><div class="st"><div class="k">ELEMENT 1 · PRINCIPLES 1 AND 2</div><div class="t">Strategic intent</div><div class="m">Steps 1 to 3 set impact objectives and manage them at portfolio level</div></div><div class="st"><div class="k">ELEMENT 2 · PRINCIPLES 3 TO 5</div><div class="t">Origination and structuring</div><div class="m">Steps 4 and 5 test contribution, expected impact and E&amp;S risk deal by deal</div></div><div class="st"><div class="k">ELEMENT 3 · PRINCIPLES 5 AND 6</div><div class="t">Portfolio management</div><div class="m">Step 8 tracks each position against its expected impact and its E&amp;S risks</div></div><div class="st"><div class="k">ELEMENT 4 · PRINCIPLES 7 AND 8</div><div class="t">Impact at exit</div><div class="m">Step 8 exits with sustained impact in mind and feeds lessons back</div></div><div class="st"><div class="k">ELEMENT 5 · PRINCIPLE 9</div><div class="t">Independent verification</div><div class="m">Step 8 reporting discloses alignment and its verification</div></div></div></section>
 
+<section class="block" id="map"><div class="eyebrow">Structure</div><h2 class="sec">The map at a glance</h2>
+<p class="secnote">Steps 1 to 3 are set once and revisited when the portfolio action decision sends work back. Steps 4 to 7 run for every deal. Step 8 runs every review cycle. Dotted lines in the diagrams mark a return to an earlier step.</p>
+<div class="rail"><div class="grp"><div class="gh">Governance and policy</div><div class="cards"><a class="card" href="#S1"><div class="k">Step 01</div><div class="t">Mandate and Governance</div><div class="c">6 tasks · Mandate statement</div></a><a class="card" href="#S2"><div class="k">Step 02</div><div class="t">Investment Policy</div><div class="c">8 tasks · 1 gate · Investment policy statement, approved by the board</div></a></div></div><div class="grp"><div class="gh">Sourcing and pipeline</div><div class="cards"><a class="card" href="#S3"><div class="k">Step 03</div><div class="t">Opportunity Set and Sourcing</div><div class="c">7 tasks · Eligible universe</div></a><a class="card" href="#S4"><div class="k">Step 04</div><div class="t">Deal Pipeline and Thesis</div><div class="c">12 tasks · 3 gates · Investment memo and risk assessment</div></a></div></div><div class="grp"><div class="gh">Approval and construction</div><div class="cards"><a class="card" href="#S5"><div class="k">Step 05</div><div class="t">Decision, Approval and Portfolio Construction</div><div class="c">5 tasks · 2 gates · Approved position and audit trail</div></a></div></div><div class="grp"><div class="gh">Deployment and execution</div><div class="cards"><a class="card" href="#S6"><div class="k">Step 06</div><div class="t">Capital Deployment Pacing</div><div class="c">5 tasks · Pacing plan</div></a><a class="card" href="#S7"><div class="k">Step 07</div><div class="t">Execution and Financial Close</div><div class="c">5 tasks · 2 gates · Live position</div></a></div></div><div class="grp"><div class="gh">Monitoring and reporting</div><div class="cards"><a class="card" href="#S8"><div class="k">Step 08</div><div class="t">Monitoring, Reporting and Restructuring</div><div class="c">12 tasks · 3 gates · Performance and impact report</div></a></div></div></div></section>
+
+<section class="phase" id="S1"><div class="ph-head"><div class="badge">1</div><div><div class="kick">Step 01</div><h2>Mandate and Governance</h2></div></div>
+<div class="authority"><span class="l">What good looks like</span>The principal, its beneficiaries and its capital objectives are written down before any deal is looked at. Every later decision has a named committee and a delegation limit.</div>
+<div class="anchors"><b>Sources</b> · OPIM Principles 1, 2; IFC SP 2012 para 21; BCBS ECL Principle 1; Practitioner practice</div>
+<div class="ph-out"><b>Output</b> · Mandate statement</div>
+<div class="ph-body"><figure class="diagram"><pre class="mermaid">flowchart TD
+  classDef llm fill:#E2EFE6,stroke:#9CC3A8,color:#1E3A28,stroke-width:1px
+  classDef hyb fill:#F6EDD6,stroke:#D9C38A,color:#4A3609,stroke-width:1px
+  classDef hum fill:#F6E3DF,stroke:#DDAFA5,color:#5C1F16,stroke-width:1px
+  classDef gate fill:#EBE5F3,stroke:#B7A6D6,color:#33244F,stroke-width:1px
+  classDef ext fill:#FAF8F4,stroke:#BDB6A8,color:#5D6B7A,stroke-dasharray:4 3
+  classDef term fill:#13202F,stroke:#13202F,color:#F7F5F0
+  n_1_1[&quot;1.1 Identify the principal and&lt;br/&gt;its constitutive limits&quot;]:::hyb
+  n_1_2[&quot;1.2 Define beneficiaries and the&lt;br/&gt;development mandate&quot;]:::hyb
+  n_1_3[&quot;1.3 Set capital objectives&quot;]:::hyb
+  n_1_4[&quot;1.4 Establish governance and&lt;br/&gt;delegation&quot;]:::hum
+  n_1_5[&quot;1.5 Define portfolio&lt;br/&gt;architecture&quot;]:::hyb
+  n_1_6[&quot;1.6 Formalize the mandate&lt;br/&gt;statement&quot;]:::hyb
+  n_START([&quot;Start&quot;]):::term
+  n_START --&gt; n_1_1
+  n_1_1 --&gt; n_1_2
+  n_1_1 --&gt; n_1_4
+  n_1_2 --&gt; n_1_3
+  n_1_2 --&gt; n_1_4
+  n_1_3 --&gt; n_1_5
+  n_1_4 --&gt; n_1_5
+  n_1_5 --&gt; n_1_6
+  n_S2[[&quot;Step 2&lt;br/&gt;Investment Policy&quot;]]:::ext
+  n_1_6 --&gt;|Mandate statement| n_S2</pre></figure><ol class="tasks"><li id="n1.1"><div class="row"><span class="id">1.1</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Portfolio head</span></div><h4>Identify the principal and its constitutive limits</h4><p>A DFI, a fund sponsor or a blended finance vehicle. Record what its charter, shareholders or limited partners allow and forbid. A model can extract this from the founding documents. The portfolio head confirms it.</p><div class="ref bp">Practitioner practice</div></li><li id="n1.2"><div class="row"><span class="id">1.2</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Portfolio head</span></div><h4>Define beneficiaries and the development mandate</h4><p>Who the portfolio is meant to benefit and which development goals it serves. The impact objectives should be consistent with the investment strategy and proportionate to the portfolio&#x27;s size.</p><div class="ref">OPIM Principle 1</div></li><li id="n1.3"><div class="row"><span class="id">1.3</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Set capital objectives</h4><p>Return target, impact overlay and the priority given to capital preservation. Say how impact and return are traded off at portfolio level.</p><div class="ref">OPIM Principles 1, 2; Practitioner practice</div></li><li id="n1.4"><div class="row"><span class="id">1.4</span><span class="chip" style="background:#F6E3DF;color:#8A2F22"><i style="background:#8A2F22"></i>Human-only</span><span class="own">Board of directors</span></div><h4>Establish governance and delegation</h4><p>Investment committee membership, a delegation matrix and approval thresholds. Name the committees that approve credit, restructurings and write-offs, and the point above which the board decides. Risk, compliance and E&amp;S keep an independent voice. These are judgments about people and authority, so they stay human.</p><div class="ref">IFC SP 2012 para 21; BCBS ECL Principle 1; Practitioner practice</div></li><li id="n1.5"><div class="row"><span class="id">1.5</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Define portfolio architecture</h4><p>Direct lending, equity, guarantees and fund investments as separate sleeves, with target weights. Say where any donor or concessional money sits and how it is kept apart from own-account capital.</p><div class="ref bp">Practitioner practice</div></li><li id="n1.6"><div class="row"><span class="id">1.6</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Portfolio head</span></div><h4>Formalize the mandate statement</h4><p>One document that brings 1.1 to 1.5 together. A model drafts it from the agreed inputs. The portfolio head signs it for board review in Step 2.</p><div class="ref bp">Practitioner practice</div></li></ol></div></section>
+<section class="phase" id="S2"><div class="ph-head"><div class="badge">2</div><div><div class="kick">Step 02</div><h2>Investment Policy</h2></div></div>
+<div class="authority"><span class="l">What good looks like</span>Return, risk appetite, limits, E&amp;S, integrity and impact rules, valuation basis and constraints sit in one policy. The board approves it before sourcing starts, and every later gate tests against it.</div>
+<div class="anchors"><b>Sources</b> · BCBS LEX paras 14, 16, 19-20, 61; IFC PS 2012; IFC SP 2012 paras 19, 22, 40; IFC EL; EDFI EL; FATF R.10; OPIM Principles 1, 2, 5; MDB PA s1.1; IPEV 2025 s1.1, s2.1; BCBS ECL Principles 1-3</div>
+<div class="ph-out"><b>Output</b> · Investment policy statement, approved by the board</div>
+<div class="ph-body"><figure class="diagram"><pre class="mermaid">flowchart TD
+  classDef llm fill:#E2EFE6,stroke:#9CC3A8,color:#1E3A28,stroke-width:1px
+  classDef hyb fill:#F6EDD6,stroke:#D9C38A,color:#4A3609,stroke-width:1px
+  classDef hum fill:#F6E3DF,stroke:#DDAFA5,color:#5C1F16,stroke-width:1px
+  classDef gate fill:#EBE5F3,stroke:#B7A6D6,color:#33244F,stroke-width:1px
+  classDef ext fill:#FAF8F4,stroke:#BDB6A8,color:#5D6B7A,stroke-dasharray:4 3
+  classDef term fill:#13202F,stroke:#13202F,color:#F7F5F0
+  n_2_1[&quot;2.1 Return and performance&lt;br/&gt;objective&quot;]:::hyb
+  n_2_2[&quot;2.2 Risk appetite and portfolio&lt;br/&gt;limits&quot;]:::hyb
+  n_2_3[&quot;2.3 E&amp;S, integrity and impact&lt;br/&gt;framework&quot;]:::hyb
+  n_2_4[&quot;2.4 Time horizon&quot;]:::hyb
+  n_2_5[&quot;2.5 Constraints and structural&lt;br/&gt;advantages&quot;]:::hyb
+  n_2_6[&quot;2.6 Select the benchmark&quot;]:::hyb
+  n_2_7[&quot;2.7 Set valuation, provisioning&lt;br/&gt;and reporting basis&quot;]:::hyb
+  n_2_8[&quot;2.8 Formalize the investment&lt;br/&gt;policy&quot;]:::hyb
+  n_2_9{&quot;2.9 Board approves mandate and&lt;br/&gt;policy?&quot;}:::gate
+  n_S1[[&quot;Step 1&lt;br/&gt;Mandate and Governance&quot;]]:::ext
+  n_S1 --&gt;|Mandate statement| n_2_1
+  n_2_1 --&gt; n_2_2
+  n_2_2 --&gt; n_2_3
+  n_2_3 --&gt; n_2_4
+  n_2_4 --&gt; n_2_5
+  n_2_5 --&gt; n_2_6
+  n_2_6 --&gt; n_2_7
+  n_2_7 --&gt; n_2_8
+  n_2_8 --&gt; n_2_9
+  n_S3[[&quot;Step 3&lt;br/&gt;Opportunity Set and&lt;br/&gt;Sourcing&quot;]]:::ext
+  n_2_9 --&gt;|Approved| n_S3
+  n_1_3[[&quot;Step 1&lt;br/&gt;1.3 Set capital objectives&quot;]]:::ext
+  n_2_9 -.-&gt;|Revise| n_1_3</pre></figure><ol class="tasks"><li id="n2.1"><div class="row"><span class="id">2.1</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Return and performance objective</h4><p>A floating-rate spread over a reference rate such as SOFR, a real return floor, or both. State it net of expected credit losses and costs.</p><div class="ref bp">Practitioner practice</div></li><li id="n2.2"><div class="row"><span class="id">2.2</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief risk officer</span></div><h4>Risk appetite and portfolio limits</h4><p>Credit loss tolerance and limits by single name, connected group, sponsor, country, sector and currency. The Basel large exposure rule caps one counterparty or connected group at 25 percent of Tier 1 capital. It exempts sovereigns and sets no country or sector limit, so those come from the principal&#x27;s own risk policy. Multilateral lenders are not bound by Basel and use it as a reference. Say who may approve an exception to an internal limit. A breach of a regulatory limit cannot be approved away.</p><div class="ref">BCBS LEX paras 14, 16, 19-20, 61; Practitioner practice</div></li><li id="n2.3"><div class="row"><span class="id">2.3</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Head of E&amp;S and impact</span></div><h4>E&amp;S, integrity and impact framework</h4><p>Adopt the IFC Performance Standards and an exclusion list. Set the E&amp;S categories, the integrity and know-your-customer standard, impact indicators, the additionality test and the Paris alignment rule. Name the indicator set, for example HIPSO or IRIS. Compliance sets the integrity standard within it.</p><div class="ref">IFC SP 2012 paras 19, 22, 40; IFC PS 2012; IFC EL; EDFI EL; OPIM Principles 1, 2, 5; MDB PA s1.1; FATF R.10</div></li><li id="n2.4"><div class="row"><span class="id">2.4</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Time horizon</h4><p>Fund life or balance-sheet horizon, deployment period and exit window. Infrastructure debt often runs fifteen years or more, so match the horizon to tenor.</p><div class="ref bp">Practitioner practice</div></li><li id="n2.5"><div class="row"><span class="id">2.5</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Legal counsel</span></div><h4>Constraints and structural advantages</h4><p>Regulatory limits, co-lending with other DFIs, and preferred creditor treatment where the principal has it. Most multilateral lenders receive that treatment in practice. Most bilateral DFIs and private funds do not, and the policy should not assume it.</p><div class="ref bp">Practitioner practice</div></li><li id="n2.6"><div class="row"><span class="id">2.6</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Select the benchmark</h4><p>An absolute return target or a reference index. Say how impact results are reported beside it.</p><div class="ref bp">Practitioner practice</div></li><li id="n2.7"><div class="row"><span class="id">2.7</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief financial officer</span></div><h4>Set valuation, provisioning and reporting basis</h4><p>Loans at amortized cost with expected credit loss provisions. Equity and fund stakes at fair value under the IPEV guidelines. Fix the measurement dates, the valuation committee and the provisioning approver.</p><div class="ref">IPEV 2025 s1.1, s2.1; BCBS ECL Principles 1-3; Practitioner practice</div></li><li id="n2.8"><div class="row"><span class="id">2.8</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Portfolio head</span></div><h4>Formalize the investment policy</h4><p>A model drafts the policy statement from 2.1 to 2.7 and checks it against the mandate. The portfolio head signs it for the board.</p><div class="ref bp">Practitioner practice</div></li><li id="n2.9"><div class="row"><span class="id">2.9</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Board of directors</span></div><h4>Board approves mandate and policy?</h4><p>The board approves, or sends the objectives back for revision.</p><div class="ref bp">Practitioner practice</div></li></ol></div></section>
+<section class="phase" id="S3"><div class="ph-head"><div class="badge">3</div><div><div class="kick">Step 03</div><h2>Opportunity Set and Sourcing</h2></div></div>
+<div class="authority"><span class="l">What good looks like</span>The universe is narrow enough to say no quickly. Sectors are tiered against the exclusion lists and Paris alignment, and currency and blended finance rules are fixed before any deal arrives.</div>
+<div class="anchors"><b>Sources</b> · MDB PA lists; EDFI FF; IFC EL; DFI BCF Box 1, Annex 1; Practitioner practice</div>
+<div class="ph-out"><b>Output</b> · Eligible universe</div>
+<div class="ph-body"><figure class="diagram"><pre class="mermaid">flowchart TD
+  classDef llm fill:#E2EFE6,stroke:#9CC3A8,color:#1E3A28,stroke-width:1px
+  classDef hyb fill:#F6EDD6,stroke:#D9C38A,color:#4A3609,stroke-width:1px
+  classDef hum fill:#F6E3DF,stroke:#DDAFA5,color:#5C1F16,stroke-width:1px
+  classDef gate fill:#EBE5F3,stroke:#B7A6D6,color:#33244F,stroke-width:1px
+  classDef ext fill:#FAF8F4,stroke:#BDB6A8,color:#5D6B7A,stroke-dasharray:4 3
+  classDef term fill:#13202F,stroke:#13202F,color:#F7F5F0
+  n_3_1[&quot;3.1 Sector allocation tiers&quot;]:::hyb
+  n_3_2[&quot;3.2 Geography tiers&quot;]:::hyb
+  n_3_3[&quot;3.3 Instrument menu&quot;]:::hyb
+  n_3_4[&quot;3.4 Currency exposure and&lt;br/&gt;hedging policy&quot;]:::hyb
+  n_3_5[&quot;3.5 Blended finance and first-&lt;br/&gt;loss rules&quot;]:::hyb
+  n_3_6[&quot;3.6 Sourcing channels&quot;]:::hyb
+  n_3_7[&quot;3.7 Formalize the eligible&lt;br/&gt;universe&quot;]:::hyb
+  n_S2[[&quot;Step 2&lt;br/&gt;Investment Policy&quot;]]:::ext
+  n_S2 --&gt;|Investment policy&lt;br/&gt;statement, approved by&lt;br/&gt;the board| n_3_1
+  n_3_1 --&gt; n_3_2
+  n_3_2 --&gt; n_3_3
+  n_3_3 --&gt; n_3_4
+  n_3_4 --&gt; n_3_5
+  n_3_5 --&gt; n_3_6
+  n_3_6 --&gt; n_3_7
+  n_S4[[&quot;Step 4&lt;br/&gt;Deal Pipeline and Thesis&quot;]]:::ext
+  n_3_7 --&gt;|Eligible universe| n_S4</pre></figure><ol class="tasks"><li id="n3.1"><div class="row"><span class="id">3.1</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Sector allocation tiers</h4><p>Power, transport, digital, water and sanitation, and social infrastructure. Tier each against the joint MDB lists of activities that are always or never aligned with the Paris mitigation goals, and against the exclusion lists. Those lists cover mitigation only, so adaptation is still tested deal by deal.</p><div class="ref">MDB PA lists; EDFI FF; IFC EL</div></li><li id="n3.2"><div class="row"><span class="id">3.2</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Geography tiers</h4><p>Core emerging markets, frontier markets and fragile states, with country limits from 2.2. Fragile states need their own risk and integrity rules.</p><div class="ref bp">Practitioner practice</div></li><li id="n3.3"><div class="row"><span class="id">3.3</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Instrument menu</h4><p>Senior secured loans, mezzanine, equity, guarantees and local-currency lending. Note which instruments the principal can hold under its charter.</p><div class="ref bp">Practitioner practice</div></li><li id="n3.4"><div class="row"><span class="id">3.4</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Treasurer</span></div><h4>Currency exposure and hedging policy</h4><p>The share of hard-currency loans to local-currency earners that is acceptable, the hedging tools available in each market, and the ceiling on unhedged exposure. Hard-currency debt against local revenue moves the FX risk to the borrower and comes back as credit risk.</p><div class="ref bp">Practitioner practice</div></li><li id="n3.5"><div class="row"><span class="id">3.5</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Blended finance lead</span></div><h4>Blended finance and first-loss rules</h4><p>When concessional or first-loss money may be used, and on what terms. Apply the DFI Enhanced Principles. Use the minimum concessionality needed, crowd private money in, and avoid distorting the market. Who provides the first loss and how donor funds are governed is written down here.</p><div class="ref">DFI BCF Box 1, Annex 1</div></li><li id="n3.6"><div class="row"><span class="id">3.6</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Head of origination</span></div><h4>Sourcing channels</h4><p>DFI co-financing pipelines, sponsor relationships and government PPP pipelines. A model can track published pipelines. Relationships stay with people.</p><div class="ref bp">Practitioner practice</div></li><li id="n3.7"><div class="row"><span class="id">3.7</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Chief investment officer</span></div><h4>Formalize the eligible universe</h4><p>A model drafts the universe document from 3.1 to 3.6. The chief investment officer signs it.</p><div class="ref bp">Practitioner practice</div></li></ol></div></section>
+<section class="phase" id="S4"><div class="ph-head"><div class="badge">4</div><div><div class="kick">Step 04</div><h2>Deal Pipeline and Thesis</h2></div></div>
+<div class="authority"><span class="l">What good looks like</span>Exclusions and integrity problems are found before money is spent on diligence. E&amp;S due diligence produces an action plan that becomes a condition of investment. The rating is set independently of the deal team before the memo is final.</div>
+<div class="anchors"><b>Sources</b> · IFC EL; EDFI EL; EDFI FF; IFC SP 2012 paras 19, 22, 28, 30, 40; IFC PS1 para 16; FATF R.6, R.7, R.10, R.12, R.24; OPIM Principles 3-5; MDB PA s1.1; MDB PA lists; CF Mitigation v4; DFI BCF Box 1; EP4 Principles 1, 2, 4, 7; BCBS ECL Principles 3, 6, paras 41, 44</div>
+<div class="ph-out"><b>Output</b> · Investment memo and risk assessment</div>
+<div class="ph-body"><figure class="diagram"><pre class="mermaid">flowchart TD
+  classDef llm fill:#E2EFE6,stroke:#9CC3A8,color:#1E3A28,stroke-width:1px
+  classDef hyb fill:#F6EDD6,stroke:#D9C38A,color:#4A3609,stroke-width:1px
+  classDef hum fill:#F6E3DF,stroke:#DDAFA5,color:#5C1F16,stroke-width:1px
+  classDef gate fill:#EBE5F3,stroke:#B7A6D6,color:#33244F,stroke-width:1px
+  classDef ext fill:#FAF8F4,stroke:#BDB6A8,color:#5D6B7A,stroke-dasharray:4 3
+  classDef term fill:#13202F,stroke:#13202F,color:#F7F5F0
+  n_4_1[&quot;4.1 Origination and initial&lt;br/&gt;screening&quot;]:::hyb
+  n_4_2{&quot;4.2 Excluded activity?&quot;}:::gate
+  n_4_3[&quot;4.3 Integrity due diligence,&lt;br/&gt;know-your-customer and&lt;br/&gt;sanctions screening&quot;]:::hyb
+  n_4_4[&quot;4.4 Research aggregation&quot;]:::llm
+  n_4_5[&quot;4.5 Political, sovereign and&lt;br/&gt;convertibility risk&quot;]:::hyb
+  n_4_6[&quot;4.6 Preliminary due diligence&quot;]:::hyb
+  n_4_7[&quot;4.7 Additionality and expected&lt;br/&gt;impact&quot;]:::hyb
+  n_4_8{&quot;4.8 Proceed to detailed due&lt;br/&gt;diligence?&quot;}:::gate
+  n_4_9[&quot;4.9 Detailed due diligence and&lt;br/&gt;financial modeling&quot;]:::hyb
+  n_4_10[&quot;4.10 E&amp;S due diligence and action&lt;br/&gt;plan&quot;]:::hyb
+  n_4_11[&quot;4.11 Paris alignment and climate&lt;br/&gt;finance tagging&quot;]:::hyb
+  n_4_12{&quot;4.12 Meets the Performance&lt;br/&gt;Standards in reasonable&lt;br/&gt;time?&quot;}:::gate
+  n_4_13[&quot;4.13 Structuring, FX hedging and&lt;br/&gt;blended finance&quot;]:::hyb
+  n_4_14[&quot;4.14 Valuation, pricing and&lt;br/&gt;internal risk rating&quot;]:::hyb
+  n_4_15[&quot;4.15 Investment memo and scenario&lt;br/&gt;analysis&quot;]:::hyb
+  n_S3[[&quot;Step 3&lt;br/&gt;Opportunity Set and&lt;br/&gt;Sourcing&quot;]]:::ext
+  n_S3 --&gt;|Eligible universe| n_4_1
+  n_4_1 --&gt; n_4_2
+  n_4_2 --&gt;|Not excluded| n_4_3
+  n_REJ([&quot;Deal declined&quot;]):::term
+  n_4_2 --&gt;|Excluded activity| n_REJ
+  n_4_3 --&gt; n_4_4
+  n_4_4 --&gt; n_4_5
+  n_4_5 --&gt; n_4_6
+  n_4_6 --&gt; n_4_7
+  n_4_7 --&gt; n_4_8
+  n_4_8 --&gt;|Proceed| n_4_9
+  n_4_8 --&gt;|More work needed| n_4_6
+  n_4_8 --&gt;|Kill, or integrity not&lt;br/&gt;cleared| n_REJ
+  n_4_9 --&gt; n_4_10
+  n_4_9 --&gt; n_4_11
+  n_4_10 --&gt; n_4_12
+  n_4_11 --&gt; n_4_12
+  n_4_12 --&gt;|Yes, with action plan| n_4_13
+  n_4_12 --&gt;|Restructure and&lt;br/&gt;resubmit| n_4_1
+  n_4_12 --&gt;|No| n_REJ
+  n_4_13 --&gt; n_4_14
+  n_4_14 --&gt; n_4_15
+  n_S5[[&quot;Step 5&lt;br/&gt;Decision, Approval and&lt;br/&gt;Portfolio Construction&quot;]]:::ext
+  n_4_15 --&gt;|Investment memo and&lt;br/&gt;risk assessment| n_S5</pre></figure><ol class="tasks"><li id="n4.1"><div class="row"><span class="id">4.1</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Investment officer</span></div><h4>Origination and initial screening</h4><p>Test each lead against the eligible universe and the limits. A model can run the first screen. The investment officer decides what to pursue.</p><div class="ref bp">Practitioner practice</div></li><li id="n4.2"><div class="row"><span class="id">4.2</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Head of E&amp;S and impact</span></div><h4>Excluded activity?</h4><p>Any activity on the exclusion lists the principal applies stops the deal. Use the version of each list in force when the deal is mandated. Otherwise E&amp;S sets a provisional category A, B or C, which decides the depth of E&amp;S due diligence.</p><div class="ref">IFC EL; EDFI EL; EDFI FF; IFC SP 2012 paras 19, 40</div></li><li id="n4.3"><div class="row"><span class="id">4.3</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Integrity and compliance officer</span></div><h4>Integrity due diligence, know-your-customer and sanctions screening</h4><p>Identify the beneficial owners. Screen sponsors, owners, directors and main contractors against sanctions lists, MDB debarment lists and politically exposed person lists, and run adverse media checks. A model runs the list matches and drafts the profile. The compliance officer judges every hit.</p><div class="ref">FATF R.6, R.7, R.10, R.12, R.24; Practitioner practice</div></li><li id="n4.4"><div class="row"><span class="id">4.4</span><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span class="own">Investment officer</span></div><h4>Research aggregation</h4><p>Compile the information memorandum, technical reports, legal and regulatory material and site-visit notes into one indexed file. People make the site visits.</p><div class="ref bp">Practitioner practice</div></li><li id="n4.5"><div class="row"><span class="id">4.5</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Country risk analyst</span></div><h4>Political, sovereign and convertibility risk</h4><p>Expropriation, transfer and convertibility, political violence and breach of contract by the state. Include mitigants such as political risk insurance or an MDB umbrella.</p><div class="ref bp">Practitioner practice</div></li><li id="n4.6"><div class="row"><span class="id">4.6</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Investment officer</span></div><h4>Preliminary due diligence</h4><p>Commercial, technical, legal and permitting checks deep enough to decide whether full diligence is worth paying for.</p><div class="ref bp">Practitioner practice</div></li><li id="n4.7"><div class="row"><span class="id">4.7</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Development impact lead</span></div><h4>Additionality and expected impact</h4><p>Why this capital is needed and what it adds beyond the market. Who benefits, by how much, and how likely that is. Use the indicators fixed in 2.3.</p><div class="ref">OPIM Principles 3, 4; DFI BCF Box 1</div></li><li id="n4.8"><div class="row"><span class="id">4.8</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Investment committee</span></div><h4>Proceed to detailed due diligence?</h4><p>Concept review. Integrity must be cleared by compliance before the deal can proceed. An unresolved integrity red flag kills the deal. Open questions send the team back to preliminary due diligence.</p><div class="ref bp">Practitioner practice</div></li><li id="n4.9"><div class="row"><span class="id">4.9</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Investment officer</span></div><h4>Detailed due diligence and financial modeling</h4><p>Construction risk, offtake, FX structure, the sponsor&#x27;s corporate governance, and the lenders&#x27; technical, legal and insurance advisers. A model can build and check the financial model. The investment officer owns the base case.</p><div class="ref bp">Practitioner practice</div></li><li id="n4.10"><div class="row"><span class="id">4.10</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">E&amp;S specialist</span></div><h4>E&amp;S due diligence and action plan</h4><p>Review against the Performance Standards. People make the site visit and lead consultation with affected communities. A model drafts the gap analysis, and the gaps become an Environmental and Social Action Plan that is a condition of investment. Category A projects usually need an independent E&amp;S review.</p><div class="ref">IFC SP 2012 paras 28, 30; IFC PS1 para 16; EP4 Principles 2, 4, 7</div></li><li id="n4.11"><div class="row"><span class="id">4.11</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Climate finance specialist</span></div><h4>Paris alignment and climate finance tagging</h4><p>Test alignment with both mitigation and adaptation goals. Tag mitigation finance against the joint MDB and IDFC list of eligible activities. Adaptation finance has its own joint method. The alignment result stays an expert judgment.</p><div class="ref">MDB PA s1.1; MDB PA lists; CF Mitigation v4; EP4 Principle 2</div></li><li id="n4.12"><div class="row"><span class="id">4.12</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Head of E&amp;S and impact</span></div><h4>Meets the Performance Standards in reasonable time?</h4><p>Yes with an action plan, restructure and resubmit, or decline.</p><div class="ref">IFC SP 2012 paras 22, 28</div></li><li id="n4.13"><div class="row"><span class="id">4.13</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Investment officer</span></div><h4>Structuring, FX hedging and blended finance</h4><p>Instrument, tenor, security, currency and hedge, for example local-currency lending or a cross-currency swap. Where concessional or first-loss money is proposed, show it meets the rules in 3.5 at minimum concessionality.</p><div class="ref">DFI BCF Box 1; Practitioner practice</div></li><li id="n4.14"><div class="row"><span class="id">4.14</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Credit risk officer</span></div><h4>Valuation, pricing and internal risk rating</h4><p>Credit spread, probability of default, loss given default and risk grade, plus an impact score. The deal team may propose the grade. Credit risk reviews it independently and sets the final rating.</p><div class="ref">BCBS ECL Principles 3, 6, paras 41, 44</div></li><li id="n4.15"><div class="row"><span class="id">4.15</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Investment officer</span></div><h4>Investment memo and scenario analysis</h4><p>Base, upside and downside cases, kill criteria, the rating, the action plan, the integrity findings and the expected impact. A model drafts. The investment officer signs.</p><div class="ref">OPIM Principle 4; Practitioner practice</div></li></ol></div></section>
+<section class="phase" id="S5"><div class="ph-head"><div class="badge">5</div><div><div class="kick">Step 05</div><h2>Decision, Approval and Portfolio Construction</h2></div></div>
+<div class="authority"><span class="l">What good looks like</span>The committee sees limit headroom, stress results and an independent risk opinion before it decides, not after. Any limit exception is approved explicitly. Approvals above delegated authority go to the board.</div>
+<div class="anchors"><b>Sources</b> · BCBS LEX paras 16, 18-20; BCBS ECL para 41; IFC SP 2012 paras 21, 40; FATF R.10; Practitioner practice</div>
+<div class="ph-out"><b>Output</b> · Approved position and audit trail</div>
+<div class="ph-body"><figure class="diagram"><pre class="mermaid">flowchart TD
+  classDef llm fill:#E2EFE6,stroke:#9CC3A8,color:#1E3A28,stroke-width:1px
+  classDef hyb fill:#F6EDD6,stroke:#D9C38A,color:#4A3609,stroke-width:1px
+  classDef hum fill:#F6E3DF,stroke:#DDAFA5,color:#5C1F16,stroke-width:1px
+  classDef gate fill:#EBE5F3,stroke:#B7A6D6,color:#33244F,stroke-width:1px
+  classDef ext fill:#FAF8F4,stroke:#BDB6A8,color:#5D6B7A,stroke-dasharray:4 3
+  classDef term fill:#13202F,stroke:#13202F,color:#F7F5F0
+  n_5_1[&quot;5.1 Portfolio fit and limit&lt;br/&gt;headroom&quot;]:::llm
+  n_5_2[&quot;5.2 Stress test&quot;]:::llm
+  n_5_3[&quot;5.3 Independent risk opinion&quot;]:::hyb
+  n_5_4[&quot;5.4 Committee package and&lt;br/&gt;compliance clearance&quot;]:::hyb
+  n_5_5{&quot;5.5 Investment committee&lt;br/&gt;decision&quot;}:::gate
+  n_5_6{&quot;5.6 Board approval if above&lt;br/&gt;delegation&quot;}:::gate
+  n_5_7[&quot;5.7 Finalize the target&lt;br/&gt;portfolio and approval&lt;br/&gt;record&quot;]:::hyb
+  n_S4[[&quot;Step 4&lt;br/&gt;Deal Pipeline and Thesis&quot;]]:::ext
+  n_S4 --&gt;|Investment memo and&lt;br/&gt;risk assessment| n_5_1
+  n_5_1 --&gt; n_5_2
+  n_5_2 --&gt; n_5_3
+  n_5_3 --&gt; n_5_4
+  n_5_4 --&gt; n_5_5
+  n_5_5 --&gt;|Approved, with or&lt;br/&gt;without conditions| n_5_6
+  n_4_15[[&quot;Step 4&lt;br/&gt;4.15 Investment memo and&lt;br/&gt;scenario analysis&quot;]]:::ext
+  n_5_5 -.-&gt;|Revise and resubmit| n_4_15
+  n_REJ([&quot;Deal declined&quot;]):::term
+  n_5_5 --&gt;|Declined| n_REJ
+  n_5_6 --&gt;|Within delegation, or&lt;br/&gt;board approved| n_5_7
+  n_5_6 --&gt;|Board declines| n_REJ
+  n_S6[[&quot;Step 6&lt;br/&gt;Capital Deployment&lt;br/&gt;Pacing&quot;]]:::ext
+  n_5_7 --&gt;|Approved position and&lt;br/&gt;audit trail| n_S6</pre></figure><ol class="tasks"><li id="n5.1"><div class="row"><span class="id">5.1</span><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span class="own">Chief risk officer</span></div><h4>Portfolio fit and limit headroom</h4><p>Size the position and compute headroom against name, connected group, sponsor, country, sector and currency limits. Flag any breach as an exception for the committee. The chief risk officer is accountable for the numbers.</p><div class="ref">BCBS LEX paras 16, 19-20; Practitioner practice</div></li><li id="n5.2"><div class="row"><span class="id">5.2</span><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span class="own">Chief risk officer</span></div><h4>Stress test</h4><p>FX shock, political event, construction delay and refinancing risk, on scenarios that risk sets. A model runs them at deal and portfolio level.</p><div class="ref bp">Practitioner practice</div></li><li id="n5.3"><div class="row"><span class="id">5.3</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Credit risk officer</span></div><h4>Independent risk opinion</h4><p>Credit risk&#x27;s own view of the deal, the rating and the exceptions. A model can draft from 5.1 and 5.2. Credit risk signs it.</p><div class="ref">BCBS ECL para 41; Practitioner practice</div></li><li id="n5.4"><div class="row"><span class="id">5.4</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Investment officer</span></div><h4>Committee package and compliance clearance</h4><p>Memo, risk opinion, E&amp;S action plan, impact case and an integrity clearance refreshed to the meeting date. The compliance officer confirms the clearance. Where the principal discloses projects before approval, the E&amp;S summary is published for the period its disclosure policy sets for the category.</p><div class="ref">IFC SP 2012 paras 21, 40; FATF R.10</div></li><li id="n5.5"><div class="row"><span class="id">5.5</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Investment committee</span></div><h4>Investment committee decision</h4><p>Approve, approve with conditions, revise and resubmit, or decline. Conditions carry into the conditions precedent in Step 7.</p><div class="ref bp">Practitioner practice</div></li><li id="n5.6"><div class="row"><span class="id">5.6</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Board of directors</span></div><h4>Board approval if above delegation</h4><p>Within delegation the deal moves on. Above it, the board decides.</p><div class="ref">IFC SP 2012 para 21; Practitioner practice</div></li><li id="n5.7"><div class="row"><span class="id">5.7</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Portfolio head</span></div><h4>Finalize the target portfolio and approval record</h4><p>Record the approved terms, conditions and any limit exceptions. This record is the test for any later change in Step 7.</p><div class="ref bp">Practitioner practice</div></li></ol></div></section>
+<section class="phase" id="S6"><div class="ph-head"><div class="badge">6</div><div><div class="kick">Step 06</div><h2>Capital Deployment Pacing</h2></div></div>
+<div class="authority"><span class="l">What good looks like</span>Commitments, disbursements, repayments and hedges are forecast together, so the portfolio never commits money it cannot fund in the currency it needs.</div>
+<div class="anchors"><b>Sources</b> · Practitioner practice</div>
+<div class="ph-out"><b>Output</b> · Pacing plan</div>
+<div class="ph-body"><figure class="diagram"><pre class="mermaid">flowchart TD
+  classDef llm fill:#E2EFE6,stroke:#9CC3A8,color:#1E3A28,stroke-width:1px
+  classDef hyb fill:#F6EDD6,stroke:#D9C38A,color:#4A3609,stroke-width:1px
+  classDef hum fill:#F6E3DF,stroke:#DDAFA5,color:#5C1F16,stroke-width:1px
+  classDef gate fill:#EBE5F3,stroke:#B7A6D6,color:#33244F,stroke-width:1px
+  classDef ext fill:#FAF8F4,stroke:#BDB6A8,color:#5D6B7A,stroke-dasharray:4 3
+  classDef term fill:#13202F,stroke:#13202F,color:#F7F5F0
+  n_6_1[&quot;6.1 Commitment schedule by&lt;br/&gt;vintage&quot;]:::llm
+  n_6_2[&quot;6.2 Net cash flow projection&quot;]:::llm
+  n_6_3[&quot;6.3 Liquidity buffer sizing&quot;]:::hyb
+  n_6_4[&quot;6.4 Funding and hedging plan&quot;]:::hyb
+  n_6_5[&quot;6.5 Apply the recycling rule&quot;]:::hyb
+  n_S5[[&quot;Step 5&lt;br/&gt;Decision, Approval and&lt;br/&gt;Portfolio Construction&quot;]]:::ext
+  n_S5 --&gt;|Approved position and&lt;br/&gt;audit trail| n_6_1
+  n_6_1 --&gt; n_6_2
+  n_6_2 --&gt; n_6_3
+  n_6_3 --&gt; n_6_4
+  n_6_4 --&gt; n_6_5
+  n_S7[[&quot;Step 7&lt;br/&gt;Execution and Financial&lt;br/&gt;Close&quot;]]:::ext
+  n_6_5 --&gt;|Pacing plan| n_S7</pre></figure><ol class="tasks"><li id="n6.1"><div class="row"><span class="id">6.1</span><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span class="own">Portfolio head</span></div><h4>Commitment schedule by vintage</h4><p>Add the approved position to the commitment and disbursement forecast by year. A model keeps the schedule. The portfolio head is accountable.</p><div class="ref bp">Practitioner practice</div></li><li id="n6.2"><div class="row"><span class="id">6.2</span><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span class="own">Portfolio head</span></div><h4>Net cash flow projection</h4><p>The J-curve for a fund, or disbursements less repayments for a balance sheet. Staged construction drawdowns go in here.</p><div class="ref bp">Practitioner practice</div></li><li id="n6.3"><div class="row"><span class="id">6.3</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Treasurer</span></div><h4>Liquidity buffer sizing</h4><p>Cover undrawn commitments, hedge margin calls and a stress case. A model proposes the size. Treasury signs it.</p><div class="ref bp">Practitioner practice</div></li><li id="n6.4"><div class="row"><span class="id">6.4</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Treasurer</span></div><h4>Funding and hedging plan</h4><p>How each commitment is funded and hedged in its currency, within the policy in 3.4. Executing a hedge is a separate human step at close.</p><div class="ref bp">Practitioner practice</div></li><li id="n6.5"><div class="row"><span class="id">6.5</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Portfolio head</span></div><h4>Apply the recycling rule</h4><p>Reinvest repayments or return capital, as the mandate allows.</p><div class="ref bp">Practitioner practice</div></li></ol></div></section>
+<section class="phase" id="S7"><div class="ph-head"><div class="badge">7</div><div><div class="kick">Step 07</div><h2>Execution and Financial Close</h2></div></div>
+<div class="authority"><span class="l">What good looks like</span>The signed documents match the approval, carry the E&amp;S, integrity and sanctions covenants, and nothing is disbursed until every condition is evidenced and the counterparties are screened again.</div>
+<div class="anchors"><b>Sources</b> · IFC SP 2012 para 24; EP4 Principle 8; FATF R.6, R.7, R.10; Practitioner practice</div>
+<div class="ph-out"><b>Output</b> · Live position</div>
+<div class="ph-body"><figure class="diagram"><pre class="mermaid">flowchart TD
+  classDef llm fill:#E2EFE6,stroke:#9CC3A8,color:#1E3A28,stroke-width:1px
+  classDef hyb fill:#F6EDD6,stroke:#D9C38A,color:#4A3609,stroke-width:1px
+  classDef hum fill:#F6E3DF,stroke:#DDAFA5,color:#5C1F16,stroke-width:1px
+  classDef gate fill:#EBE5F3,stroke:#B7A6D6,color:#33244F,stroke-width:1px
+  classDef ext fill:#FAF8F4,stroke:#BDB6A8,color:#5D6B7A,stroke-dasharray:4 3
+  classDef term fill:#13202F,stroke:#13202F,color:#F7F5F0
+  n_7_1[&quot;7.1 Negotiation and&lt;br/&gt;documentation&quot;]:::hum
+  n_7_2{&quot;7.2 Final terms within the&lt;br/&gt;approval?&quot;}:::gate
+  n_7_3[&quot;7.3 Conditions precedent and&lt;br/&gt;regulatory approvals&quot;]:::hyb
+  n_7_4[&quot;7.4 Pre-disbursement integrity&lt;br/&gt;and sanctions refresh&quot;]:::hyb
+  n_7_5{&quot;7.5 Conditions precedent&lt;br/&gt;satisfied?&quot;}:::gate
+  n_7_6[&quot;7.6 Financial close and first&lt;br/&gt;disbursement&quot;]:::hum
+  n_7_7[&quot;7.7 Booking, custodian and&lt;br/&gt;trustee setup&quot;]:::hyb
+  n_S6[[&quot;Step 6&lt;br/&gt;Capital Deployment&lt;br/&gt;Pacing&quot;]]:::ext
+  n_S6 --&gt;|Pacing plan| n_7_1
+  n_7_1 --&gt; n_7_2
+  n_7_2 --&gt;|Within approval| n_7_3
+  n_5_4[[&quot;Step 5&lt;br/&gt;5.4 Committee package and&lt;br/&gt;compliance clearance&quot;]]:::ext
+  n_7_2 -.-&gt;|Material change| n_5_4
+  n_7_3 --&gt; n_7_4
+  n_7_4 --&gt; n_7_5
+  n_7_5 --&gt;|Satisfied| n_7_6
+  n_7_5 --&gt;|Renegotiate or seek&lt;br/&gt;waiver| n_7_1
+  n_TERM([&quot;Deal terminated before close&quot;]):::term
+  n_7_5 --&gt;|Terminate| n_TERM
+  n_7_6 --&gt; n_7_7
+  n_S8[[&quot;Step 8&lt;br/&gt;Monitoring, Reporting&lt;br/&gt;and Restructuring&quot;]]:::ext
+  n_7_7 --&gt;|Live position| n_S8</pre></figure><ol class="tasks"><li id="n7.1"><div class="row"><span class="id">7.1</span><span class="chip" style="background:#F6E3DF;color:#8A2F22"><i style="background:#8A2F22"></i>Human-only</span><span class="own">Investment officer</span></div><h4>Negotiation and documentation</h4><p>Term sheet, loan agreement and security package. Include the action plan, E&amp;S reporting, supervision rights, integrity and sanctions representations, and remedies for breach. Negotiation and every commitment stay with people.</p><div class="ref">IFC SP 2012 para 24; EP4 Principle 8</div></li><li id="n7.2"><div class="row"><span class="id">7.2</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Credit risk officer</span></div><h4>Final terms within the approval?</h4><p>Credit risk compares the final terms with the approval record from 5.7. A material change goes back to the committee.</p><div class="ref bp">Practitioner practice</div></li><li id="n7.3"><div class="row"><span class="id">7.3</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Legal counsel</span></div><h4>Conditions precedent and regulatory approvals</h4><p>A model keeps the checklist and matches each piece of evidence to its condition. Counsel signs off each one.</p><div class="ref bp">Practitioner practice</div></li><li id="n7.4"><div class="row"><span class="id">7.4</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Integrity and compliance officer</span></div><h4>Pre-disbursement integrity and sanctions refresh</h4><p>Screen the counterparties and the payment route again just before money moves. The compliance officer clears it.</p><div class="ref">FATF R.6, R.7, R.10</div></li><li id="n7.5"><div class="row"><span class="id">7.5</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Portfolio head</span></div><h4>Conditions precedent satisfied?</h4><p>Counsel confirms the evidence for each condition, and a clean integrity refresh from 7.4 is one of them. The outcome is satisfied, renegotiate or seek a waiver, or terminate. Waivers follow the delegation matrix.</p><div class="ref bp">Practitioner practice</div></li><li id="n7.6"><div class="row"><span class="id">7.6</span><span class="chip" style="background:#F6E3DF;color:#8A2F22"><i style="background:#8A2F22"></i>Human-only</span><span class="own">Treasurer</span></div><h4>Financial close and first disbursement</h4><p>Authorized signatories sign, treasury executes any hedge, and the first money is released. Disbursement may be staged to construction milestones. Each later drawdown repeats its conditions and the integrity refresh.</p><div class="ref bp">Practitioner practice</div></li><li id="n7.7"><div class="row"><span class="id">7.7</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Loan administration</span></div><h4>Booking, custodian and trustee setup</h4><p>A model checks the booking against the signed agreement. Loan administration signs it off.</p><div class="ref bp">Practitioner practice</div></li></ol></div></section>
+<section class="phase" id="S8"><div class="ph-head"><div class="badge">8</div><div><div class="kick">Step 08</div><h2>Monitoring, Reporting and Restructuring</h2></div></div>
+<div class="authority"><span class="l">What good looks like</span>Early warning indicators move a position to the watchlist before it is past due. Restructurings and write-offs are decided by a named committee. Exits are planned with impact in mind, and lessons go back into policy.</div>
+<div class="anchors"><b>Sources</b> · IFC SP 2012 paras 24, 45; IFC PS1 paras 22-24, 35; EP4 Principles 8, 9; BCBS ECL A4, A13-A25, A52-A54; BCBS NPE paras 31, 36-40; IPEV 2025 s2.1, s2.6, s2.7, s3.8, s5.16, s5.17; OPIM Principles 5-9; CF Mitigation v4; ILPA 2025</div>
+<div class="ph-out"><b>Output</b> · Performance and impact report</div>
+<div class="ph-body"><figure class="diagram"><pre class="mermaid">flowchart TD
+  classDef llm fill:#E2EFE6,stroke:#9CC3A8,color:#1E3A28,stroke-width:1px
+  classDef hyb fill:#F6EDD6,stroke:#D9C38A,color:#4A3609,stroke-width:1px
+  classDef hum fill:#F6E3DF,stroke:#DDAFA5,color:#5C1F16,stroke-width:1px
+  classDef gate fill:#EBE5F3,stroke:#B7A6D6,color:#33244F,stroke-width:1px
+  classDef ext fill:#FAF8F4,stroke:#BDB6A8,color:#5D6B7A,stroke-dasharray:4 3
+  classDef term fill:#13202F,stroke:#13202F,color:#F7F5F0
+  n_8_1[&quot;8.1 Track covenants and KPIs&lt;br/&gt;against the thesis&quot;]:::llm
+  n_8_2[&quot;8.2 Monitor the E&amp;S action plan&quot;]:::hyb
+  n_8_3[&quot;8.3 Early warning indicators&quot;]:::llm
+  n_8_4[&quot;8.4 Performance attribution&quot;]:::llm
+  n_8_5[&quot;8.5 Credit review, rating&lt;br/&gt;migration and IFRS 9 staging&quot;]:::hyb
+  n_8_6[&quot;8.6 Valuation of equity and&lt;br/&gt;fair-value positions&quot;]:::hyb
+  n_8_7[&quot;8.7 Development impact reporting&quot;]:::hyb
+  n_8_8{&quot;8.8 Watchlist trigger?&quot;}:::gate
+  n_8_9[&quot;8.9 Watchlist plan and&lt;br/&gt;restructuring assessment&quot;]:::hyb
+  n_8_10[&quot;8.10 Workout and recovery&quot;]:::hum
+  n_8_11{&quot;8.11 Restructure, continue or&lt;br/&gt;write off?&quot;}:::gate
+  n_8_12[&quot;8.12 Reassess conditions and&lt;br/&gt;portfolio views&quot;]:::hyb
+  n_8_13{&quot;8.13 Portfolio action decision&quot;}:::gate
+  n_8_14[&quot;8.14 Exit execution&quot;]:::hum
+  n_8_15[&quot;8.15 Stakeholder reporting&quot;]:::hyb
+  n_S7[[&quot;Step 7&lt;br/&gt;Execution and Financial&lt;br/&gt;Close&quot;]]:::ext
+  n_S7 --&gt;|Live position| n_8_1
+  n_8_1 --&gt; n_8_2
+  n_8_2 --&gt; n_8_3
+  n_8_3 --&gt; n_8_4
+  n_8_4 --&gt; n_8_5
+  n_8_5 --&gt; n_8_6
+  n_8_6 --&gt; n_8_7
+  n_8_7 --&gt; n_8_8
+  n_8_8 --&gt;|Triggered| n_8_9
+  n_8_8 --&gt;|Not triggered| n_8_12
+  n_8_9 --&gt; n_8_11
+  n_8_10 --&gt; n_8_11
+  n_8_11 --&gt;|Cured or restructured,&lt;br/&gt;back to monitoring| n_8_1
+  n_8_11 --&gt;|Start or continue&lt;br/&gt;workout| n_8_10
+  n_8_11 --&gt;|Exit, sale or write-&lt;br/&gt;off| n_8_14
+  n_8_12 --&gt; n_8_13
+  n_8_13 --&gt;|Hold| n_8_15
+  n_8_13 --&gt;|Exit a position| n_8_14
+  n_5_1[[&quot;Step 5&lt;br/&gt;5.1 Portfolio fit and limit&lt;br/&gt;headroom&quot;]]:::ext
+  n_8_13 -.-&gt;|Tactical, limit drift| n_5_1
+  n_3_1[[&quot;Step 3&lt;br/&gt;3.1 Sector allocation tiers&quot;]]:::ext
+  n_8_13 -.-&gt;|Strategic, regime&lt;br/&gt;shift| n_3_1
+  n_1_1[[&quot;Step 1&lt;br/&gt;1.1 Identify the principal&lt;br/&gt;and its constitutive&lt;br/&gt;limits&quot;]]:::ext
+  n_8_13 -.-&gt;|Fundamental, mandate&lt;br/&gt;review| n_1_1
+  n_8_14 --&gt; n_8_15
+  n_END([&quot;End of cycle, next review&quot;]):::term
+  n_8_15 --&gt; n_END</pre></figure><ol class="tasks"><li id="n8.1"><div class="row"><span class="id">8.1</span><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span class="own">Portfolio manager</span></div><h4>Track covenants and KPIs against the thesis</h4><p>Financial covenants, construction progress and offtake volumes from borrower reports. A model reads the reports and flags breaches. The portfolio manager is accountable.</p><div class="ref">EP4 Principle 8; Practitioner practice</div></li><li id="n8.2"><div class="row"><span class="id">8.2</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">E&amp;S specialist</span></div><h4>Monitor the E&amp;S action plan</h4><p>Review the annual monitoring report and progress on the action plan, with site visits by people. Category A projects usually have independent monitoring. Track grievances from affected communities and any complaint to the principal&#x27;s accountability mechanism. Where the client falls out of compliance, work it back in, then use remedies.</p><div class="ref">IFC SP 2012 paras 24, 45; IFC PS1 paras 22-24, 35; EP4 Principle 9; OPIM Principle 5</div></li><li id="n8.3"><div class="row"><span class="id">8.3</span><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span class="own">Portfolio manager</span></div><h4>Early warning indicators</h4><p>Cover ratio trends, late payments, currency moves, sponsor distress, construction slippage, adverse media and new sanctions hits. A model runs the rules and raises alerts. Thresholds are set by credit risk.</p><div class="ref">BCBS ECL A19, A24-A25; Practitioner practice</div></li><li id="n8.4"><div class="row"><span class="id">8.4</span><span class="chip" style="background:#E2EFE6;color:#2D5F3D"><i style="background:#2D5F3D"></i>Model-run</span><span class="own">Portfolio manager</span></div><h4>Performance attribution</h4><p>Spread, FX effect and credit migration, at position and portfolio level.</p><div class="ref bp">Practitioner practice</div></li><li id="n8.5"><div class="row"><span class="id">8.5</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Credit risk officer</span></div><h4>Credit review, rating migration and IFRS 9 staging</h4><p>Re-rate each position and assess a significant increase in credit risk, using 30 days past due only as a backstop. Default is presumed no later than 90 days past due, a presumption that can be rebutted. A model drafts the staging and expected credit loss. Credit risk signs, and the named committee approves provisions.</p><div class="ref">BCBS ECL Principles 3, 6, A4, A13-A25, A52-A54</div></li><li id="n8.6"><div class="row"><span class="id">8.6</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Valuation committee</span></div><h4>Valuation of equity and fair-value positions</h4><p>Value at each measurement date, usually by discounted cash flows for infrastructure. Calibrate to the entry price and backtest against realized exits. A model drafts. The valuer stays accountable for anything a model produces, as the 2025 guidelines say. The valuation committee approves.</p><div class="ref">IPEV 2025 s2.1, s2.6, s2.7, s3.8, s5.16, s5.17</div></li><li id="n8.7"><div class="row"><span class="id">8.7</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Development impact lead</span></div><h4>Development impact reporting</h4><p>Jobs, emissions avoided, access to services and climate finance, against the expected impact at approval. Act when a position will not reach its intended impact.</p><div class="ref">OPIM Principle 6; CF Mitigation v4</div></li><li id="n8.8"><div class="row"><span class="id">8.8</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Portfolio and watchlist committee</span></div><h4>Watchlist trigger?</h4><p>Triggered by early warning rules, a downgrade, a covenant breach or an unresolved E&amp;S breach. The committee confirms each move on or off the list.</p><div class="ref">BCBS ECL A24; BCBS NPE para 39; Practitioner practice</div></li><li id="n8.9"><div class="row"><span class="id">8.9</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Special operations unit</span></div><h4>Watchlist plan and restructuring assessment</h4><p>Agree a remediation plan with the client where one is possible, and transfer serious cases to the special operations unit. Assess options and whether any concession is forbearance, which keeps the position flagged for at least one year of timely payment. A model drafts the options paper.</p><div class="ref">BCBS NPE paras 36-40</div></li><li id="n8.10"><div class="row"><span class="id">8.10</span><span class="chip" style="background:#F6E3DF;color:#8A2F22"><i style="background:#8A2F22"></i>Human-only</span><span class="own">Special operations unit</span></div><h4>Workout and recovery</h4><p>Standstills, negotiation with sponsors and other lenders, security enforcement and recovery. These are negotiations and binding commitments.</p><div class="ref">BCBS NPE para 39; Practitioner practice</div></li><li id="n8.11"><div class="row"><span class="id">8.11</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Credit committee</span></div><h4>Restructure, continue or write off?</h4><p>Return the position to monitoring once cured or restructured, start or continue a workout, or approve an exit, sale or write-off. Counsel documents any restructuring before the position returns to monitoring, and a forborne position keeps its flag.</p><div class="ref">BCBS NPE paras 31, 40; Practitioner practice</div></li><li id="n8.12"><div class="row"><span class="id">8.12</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Portfolio head</span></div><h4>Reassess conditions and portfolio views</h4><p>Compare expected and actual results, financial and impact. Record lessons for policy and for the next deals.</p><div class="ref">OPIM Principle 8</div></li><li id="n8.13"><div class="row"><span class="id">8.13</span><span class="chip" style="background:#EBE5F3;color:#4B3576"><i style="background:#4B3576"></i>Decision gate</span><span class="own">Investment committee</span></div><h4>Portfolio action decision</h4><p>Hold, exit a position, or loop back. Drift beyond limits sends the portfolio back to sizing. A regime shift sends it back to strategy, and a change in the principal back to the mandate.</p><div class="ref bp">Practitioner practice</div></li><li id="n8.14"><div class="row"><span class="id">8.14</span><span class="chip" style="background:#F6E3DF;color:#8A2F22"><i style="background:#8A2F22"></i>Human-only</span><span class="own">Investment officer</span></div><h4>Exit execution</h4><p>Sell, refinance or prepay with the effect on sustained impact considered. Self-liquidating loans that mature are not exits in this sense. A write-off approved in 8.11 is booked by finance, and recovery continues where it can.</p><div class="ref">OPIM Principle 7; IPEV 2025 s2.7</div></li><li id="n8.15"><div class="row"><span class="id">8.15</span><span class="chip" style="background:#F6EDD6;color:#7A5A12"><i style="background:#7A5A12"></i>Hybrid</span><span class="own">Reporting lead</span></div><h4>Stakeholder reporting</h4><p>Board and limited partner reports, regulatory filings and public disclosure. An impact principles signatory discloses its alignment every year and has it verified independently at regular intervals. Fund fee and expense reports follow the ILPA Reporting Template where it applies. A model drafts. The reporting lead signs.</p><div class="ref">OPIM Principle 9; ILPA 2025; Practitioner practice</div></li></ol></div></section>
+<section class="block" id="questions"><div class="eyebrow">For reviewers</div><h2 class="sec">Open questions for practitioners</h2>
+<p class="secnote">Some choices in the map rest on judgment. These are the ones where an experienced DFI portfolio head can improve it most. The current split is 5 human-only, 47 hybrid and 8 model-run tasks, with 11 decision gates.</p>
+<ol class="tasks qs"><li><h4>Should pacing sit before sourcing as a standing plan?</h4><p>v2 keeps Step 6 after approval so the step order matches v1. Many portfolio teams run the pacing plan continuously and use it to ration the pipeline in Step 4.</p></li><li><h4>Who should own the watchlist trigger?</h4><p>v2 lets rules raise the alert and a committee confirm each move. Some institutions let credit risk move a name alone and report it afterwards.</p></li><li><h4>Where should first-loss and concessional pricing be decided?</h4><p>v2 leaves it with the investment committee under the blended finance rules in 3.5. A separate committee for donor funds would manage the conflict between own-account and concessional money more clearly.</p></li><li><h4>How often should integrity due diligence be refreshed for sponsors already in the portfolio?</h4><p>v2 refreshes at the committee date and before each disbursement. A risk-based cycle for repeat sponsors would cost less but could miss a change in ownership.</p></li></ol></section>
+
+<footer><span>Built at SpaceXAI and shared with permission. Revised in October 2026 from the original map, which is archived at <a href="./v1/">./v1/</a>.</span><span>Built from one structured spec, so every count on this page is computed.</span></footer>
+</main></div>
 <script>
-// Load mermaid from CDN with fallback
-function loadMermaid(cb) {
-  var urls = [
-    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js'
-  ];
-  function tryNext(i) {
-    if (i >= urls.length) {
-      document.querySelectorAll('.diagram-body').forEach(function(el) {
-        el.innerHTML = '<p style="color:#f87171;padding:20px;">Could not load Mermaid library. Check network/ad-blocker settings.</p>';
-      });
-      return;
-    }
-    var s = document.createElement('script');
-    s.src = urls[i];
-    s.onload = cb;
-    s.onerror = function() { tryNext(i + 1); };
-    document.head.appendChild(s);
-  }
-  tryNext(0);
-}
-
-loadMermaid(function() { (document.fonts ? document.fonts.ready : Promise.resolve()).then(function() {
-  var mermaidConfig = {
-    startOnLoad: false,
-    theme: 'base',
-    themeVariables: {
-      primaryColor: '#F4F1EA',
-      primaryTextColor: '#13202F',
-      primaryBorderColor: '#BDB6A8',
-      lineColor: '#8A95A3',
-      secondaryColor: '#FAF8F4',
-      tertiaryColor: '#FFFFFF',
-      background: '#FFFFFF',
-      mainBkg: '#F4F1EA',
-      nodeBorder: '#BDB6A8',
-      clusterBkg: '#FAF8F4',
-      clusterBorder: '#E6E1D8',
-      titleColor: '#13202F',
-      edgeLabelBackground: '#FFFFFF'
-    },
-    flowchart: { htmlLabels: true, curve: 'basis' },
-    securityLevel: 'loose'
-  };
-
-  mermaid.initialize(mermaidConfig);
-
-  // Render all diagrams manually
-  var diagrams = document.querySelectorAll('pre.mermaid');
-  diagrams.forEach(function(el, idx) {
-    var src = el.textContent.trim();
-    var id = 'mermaid-render-' + idx;
-    try {
-      // mermaid v10 uses callback style
-      if (mermaid.render.length > 2 || typeof mermaid.render === 'function') {
-        mermaid.render(id, src).then(function(result) {
-          el.innerHTML = result.svg;
-          el.removeAttribute('data-processed');
-        }).catch(function(err) {
-          console.warn('Diagram ' + idx + ' error:', err);
-          el.innerHTML = '<p style="color:#f87171">Error rendering diagram</p>';
-        });
-      }
-    } catch(e) {
-      // Fallback: just let mermaid process it on load
-      console.warn('Render error, trying startOnLoad fallback', e);
-      mermaid.initialize(Object.assign({}, mermaidConfig, { startOnLoad: true }));
-      mermaid.contentLoaded();
-    }
-  });
-
-  // Tabs
-  document.querySelectorAll('.tab-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-      document.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
-      btn.classList.add('active');
-      var target = document.getElementById('tab-' + btn.dataset.tab);
-      target.classList.add('active');
-
-      // Re-render diagrams in newly visible tab
-      var preTags = target.querySelectorAll('pre.mermaid');
-      preTags.forEach(function(pre, i) {
-        // Only re-render if it still has text content (not yet rendered SVG)
-        if (pre.querySelector('svg')) return;
-        var src = pre.textContent.trim();
-        if (!src) return;
-        var rid = 'tab-render-' + btn.dataset.tab + '-' + i + '-' + Date.now();
-        mermaid.render(rid, src).then(function(result) {
-          pre.innerHTML = result.svg;
-        }).catch(function() {});
-      });
-    });
-  });
-
-  // Store raw source for copy/fullscreen
-  window._diaSources = {};
-  document.querySelectorAll('pre.mermaid').forEach(function(el) {
-    // Store before first render overwrites textContent
-    if (el.id && !el.querySelector('svg')) {
-      window._diaSources[el.id] = el.textContent.trim();
-    }
-  });
-}); });
-
-// Store sources immediately before mermaid loads
-window._diaSources = {};
-document.querySelectorAll('pre.mermaid').forEach(function(el) {
-  if (el.id) {
-    window._diaSources[el.id] = el.textContent.trim();
-  }
-});
-
-// Copy source
-function copySrc(id) {
-  var key = 'dia-' + id;
-  var text = window._diaSources[key] || '';
-  if (!text) {
-    var el = document.getElementById(key);
-    text = el ? el.textContent.trim() : '';
-  }
-  navigator.clipboard.writeText(text).then(function() {
-    var toast = document.getElementById('toast');
-    toast.classList.add('show');
-    setTimeout(function() { toast.classList.remove('show'); }, 2000);
-  });
-}
-
-// Fullscreen
-function openFs(id) {
-  var key = 'dia-' + id;
-  var src = window._diaSources[key] || '';
-  if (!src) return;
-  var overlay = document.getElementById('fs-overlay');
-  var content = document.getElementById('fs-content');
-
-  if (typeof mermaid !== 'undefined') {
-    mermaid.render('fs-render-' + Date.now(), src).then(function(result) {
-      content.innerHTML = result.svg;
-    }).catch(function() {
-      content.innerHTML = '<p style="color:#f87171">Error rendering diagram</p>';
-    });
-  }
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeFs() {
-  document.getElementById('fs-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeFs(); });
+mermaid.initialize({ startOnLoad:false, theme:'base', securityLevel:'loose',
+  flowchart:{ htmlLabels:true, curve:'basis', nodeSpacing:28, rankSpacing:34, padding:12 },
+  themeVariables:{ fontFamily:'Inter, system-ui, sans-serif', fontSize:'13px', lineColor:'#A59F92', primaryTextColor:'#13202F', edgeLabelBackground:'#FFFFFF', tertiaryTextColor:'#5D6B7A' } });
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(()=>mermaid.run({ querySelector:'.mermaid' }));
+const links=[...document.querySelectorAll('aside.toc a')]; const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ links.forEach(l=>l.classList.remove('on')); const a=map.get(e.target.id); if(a) a.classList.add('on'); } }); },{ rootMargin:'-20% 0px -70% 0px' });
+document.querySelectorAll('section[id], #top').forEach(s=>io.observe(s));
 </script>
-</body>
-</html>
+</body></html>

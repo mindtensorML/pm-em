@@ -1,15 +1,12 @@
-# EM Infrastructure Portfolio Process
+# EM Infrastructure Portfolio Process (v2)
 
 Live map at https://mindtensorml.github.io/pm-em/
 
-This map covers running an emerging-market infrastructure and project finance portfolio, from mandate to monitoring, in 8 steps, 5 gates and 52 process nodes.
+Running an emerging-market infrastructure portfolio from mandate and investment policy through sourcing, approval, deployment and close, to monitoring, watchlist, restructuring and exit. Mapped against the IFC Performance Standards (2012) and the Operating Principles for Impact Management (2019), with IPEV 2025 for valuation and Basel guidance for credit risk.
 
-- The gates are E&S screening under the IFC Performance Standards, a preliminary due diligence go or kill, a three-way IC decision, conditions precedent, and a watchlist trigger.
-- PD and LGD risk grading, concentration checks and stress tests come before approval.
-- J-curve projection drives the pacing plan.
-- Monitoring reports SDG results such as jobs, CO2 and access.
-- Three feedback loops send problems back to construction, sourcing or the mandate.
+- 8 steps, 60 tasks and 11 decision gates. Approvals, restructurings and write-offs sit with named committees, and approvals above delegated authority go to the board.
+- Integrity and sanctions screening at concept, before committee and before each disbursement. E&S exclusion and category checks up front, and E&S supervision, early warning indicators and IFRS 9 staging in monitoring.
+- 8 tasks a model can run with the owner accountable, 47 a model drafts and the owner signs, and 5 stay with people.
+- The first version of this map was turned into a skills file that a frontier model followed through most of the process. v2 keeps the same 8-step structure.
 
-This map was turned into a skills file that a frontier model followed through most of the process. The design is now the basis of an ongoing SpaceXAI project.
-
-Built by Caesar Rana, CFA, at SpaceXAI and shared with permission. The map describes a general method and contains no client data. See all the maps at https://mindtensorml.github.io/
+Built by Caesar Rana, CFA, APMG Certified PPP Professional (CP3P), at SpaceXAI and shared with permission. Revised in October 2026. The original map is archived in `v1/`. The map describes a general method and contains no client data. The tags are design estimates of what a frontier model could do with the owner accountable, not measured results. See all the maps at https://mindtensorml.github.io/
